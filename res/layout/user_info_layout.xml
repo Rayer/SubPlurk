@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" android:orientation="vertical">
+
+<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"><ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_avatar_iv"></ImageView>
+<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_basicinfo_ll" android:orientation="vertical"><TextView android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_id_tv"></TextView>
+<TextView android:text="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_nickname_tv"></TextView>
+<TextView android:text="@+id/TextView03" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_fullname_tv"></TextView>
+<TextView android:text="@+id/TextView04" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_karma_tv"></TextView>
+</LinearLayout>
+</LinearLayout>
+<TextView android:text="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/user_info_jsdetail_tv"></TextView>
+</LinearLayout>
