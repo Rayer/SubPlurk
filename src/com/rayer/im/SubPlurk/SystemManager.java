@@ -2,13 +2,16 @@ package com.rayer.im.SubPlurk;
 
 import com.rayer.util.event.EventManager;
 import com.rayer.util.plurk.PlurkController;
+import com.rayer.util.plurk.data.PublicUserInfo;
+import com.rayer.util.provisioner.ResourceProvisioner;
 
 public class SystemManager extends EventManager {
 	
 	SystemManager() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
+		
 
 	static SystemManager msDefaultInst;
 	public static SystemManager getInst() {
@@ -20,9 +23,10 @@ public class SystemManager extends EventManager {
 	
 	PlurkController mController = new PlurkController();
 	
+	ResourceProvisioner<PublicUserInfo> mUserInfoCache;
+	
 	
 	public PlurkController getPlurkController() {
 		return mController;
 	}
-
 }

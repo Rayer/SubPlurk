@@ -6,22 +6,29 @@ import java.util.Set;
 
 public class PostObject {
 	
+	//這四個以後一定要消滅掉, 看看用甚麼方法
 	HashMap<String, String> mPostObjectMap = new HashMap<String, String>();
 	static String APIKEY_LABEL = "";
 	static String APIKEY_VALUE = "";
+	
+	static String PREFIX = "";
 	
 	public static void setAPIParams(String label, String value) {
 		APIKEY_LABEL = label;
 		APIKEY_VALUE = value;
 	}
 	
-	String mPrefix = "";
+	public static void setPostfix(String mainUrl) {
+		PREFIX = mainUrl;		
+	}
+	
+	String mUrlCategory = "";
 	/**
 	 * Create a PostObject object, String will be pair of [parameters, value]
 	 * A rather dangerous way, but due to convenience...
 	 * @param paramList Odd(1 3 5 7 ...) order will be Parameters, and even(2 4 6 8 ...) order will be value.
 	 */
-	public PostObject(String prefix, String... paramList) {
+	public PostObject(String category, String... paramList) {
 		if(paramList.length == 0 || paramList.length % 2 != 0)
 			throw new RuntimeException("PostObject's paramList length must be even, and greater then 0");
 		
@@ -36,18 +43,20 @@ public class PostObject {
 				if(mPostObjectMap.containsKey(s))
 					throw new RuntimeException("dupicated keys found");
 			}
-			else
-				mPostObjectMap.put(buffer, s);
-			
+			else {
+				if(s.equals("") == false)
+					mPostObjectMap.put(buffer, s);
+			}
 			orderIsParam = !orderIsParam;
-			mPrefix = prefix;
+			mUrlCategory = category;
 		}
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(mPrefix);
+		sb.append(PREFIX);
+		sb.append(mUrlCategory);
 		sb.append("?");
 		boolean first = true;
 		Set<Entry<String, String> > set = mPostObjectMap.entrySet();
@@ -72,5 +81,7 @@ public class PostObject {
 	static public boolean validateKeys(PostObject obj, String[] str) {
 		return false;
 	}
+
+
 
 }

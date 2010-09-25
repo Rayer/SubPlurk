@@ -1,12 +1,8 @@
 package com.rayer.util.plurk.data;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import com.rayer.util.databridge.JSONConverter;
 
 /**
  * 先暫時全部都寫String, 以後在慢慢改
@@ -30,20 +26,10 @@ public class UserInfo {
 	
 	public UserInfo(JSONObject userObject) {
 		
-		Field[] fields = UserInfo.class.getFields();
-		for(Field f : fields) {
-			Log.d("SubPlurk", "getting info : " + f.getName());
-			try {
-				f.set(this, userObject.get(f.getName()));
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
+		JSONConverter.extractFromJSON(UserInfo.class, this, userObject);
 	}
+
+
 	
 	public Integer getID() {
 		return uid;
@@ -59,5 +45,39 @@ public class UserInfo {
 	
 	public Double getKarma() {
 		return karma == null ? 0.0 : karma;
+	}
+	
+	/**
+	 * placeholder, will use more flexible method
+	 * @return
+	 */
+	public String createAvatarUrlBig() {
+		if(has_profile_image == 0)
+			return "http://www.plurk.com/static/default_big.gif";
+		
+		if(avatar == null)
+			return "http://avatars.plurk.com/" + getID() + "-big.jpg";
+		
+		return "http://avatars.plurk.com/" + getID() + "-big" + avatar + ".jpg";
+	}
+	
+	public String createAvatarUrlMedium() {
+		if(has_profile_image == 0)
+			return "http://www.plurk.com/static/default_medium.gif";
+		
+		if(avatar == null)
+			return "http://avatars.plurk.com/" + getID() + "medium.gif";
+		
+		return "http://avatars.plurk.com/" + getID() + "-medium" + avatar + ".gif";
+	}
+	
+	public String createAvatarUrlSmall() {
+		if(has_profile_image == 0)
+			return "http://www.plurk.com/static/default_small.gif";
+		
+		if(avatar == null)
+			return "http://avatars.plurk.com/" + getID() + "-small.gif";
+		
+		return "http://avatars.plurk.com/" + getID() + "-small" + avatar + ".gif";
 	}
 }
