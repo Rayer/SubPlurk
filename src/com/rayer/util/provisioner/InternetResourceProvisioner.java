@@ -26,7 +26,12 @@ public abstract class InternetResourceProvisioner<T> implements ResourceProvisio
 		
 		mIdentificator = identificator;
 		//完全不用管cache的問題 來一次連一次就對了
-		InputStream is = new PatchInputStream(createStream());
+		InputStream is = createStream();
+		if(is == null)
+			return null;
+		
+		//修正某些jpeg的問題 不過相對的，不是jpeg的場合應該是不用patch
+		is = new PatchInputStream(is);
 		//if(is == null)
 			//return null;
 		
@@ -89,11 +94,9 @@ public abstract class InternetResourceProvisioner<T> implements ResourceProvisio
 			//Log.d("hamibook2", "file length = " + mFileLength);
 			
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return is;

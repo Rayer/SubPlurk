@@ -14,6 +14,7 @@ public interface PlurkInterface {
 	//String getAPIKey();
 	
 	/**
+	 * Implementation of /API/Users/register
 	 * Not implemented yet. Waiting for https protocol implemented.
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
@@ -21,6 +22,7 @@ public interface PlurkInterface {
 	JSONObject register(String nickname, String fullname, String password, String gender, String date_of_birth, String opt_email) throws ClientProtocolException, IOException;
 	
 	/**
+	 * Implementation of /API/Users/login
 	 * Login, just like regular login. Be advised, you may want to catch ClientProtocolException first rather then IOException.
 	 * @param username Username
 	 * @param password Password
@@ -31,6 +33,7 @@ public interface PlurkInterface {
 	JSONObject login(String username, String password) throws ClientProtocolException, IOException;
 	
 	/**
+	 * Implementation of /API/Users/logout
 	 * Logout.
 	 * @return true for successfully logout, false for otherwise
 	 */
@@ -43,5 +46,12 @@ public interface PlurkInterface {
 	//API/Profile
 	PublicUserInfo getPublicProfile(int uid);
 	UserInfo getOwnProfile();
+	
+	/**
+	 * Implementation of /API/Responses/get.
+	 * @param plurk_id
+	 * @param offset optional, it means only fetch responses from an offset - could be 0(no offset set), 5, 10 or 15.
+	 */
+	void getResponser(int plurk_id, int offset);
 	
 }

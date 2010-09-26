@@ -2,9 +2,7 @@ package com.rayer.im.SubPlurk;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
+import java.util.ArrayList;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,12 +16,16 @@ import com.rayer.util.plurk.data.UserInfo;
 import com.she.util.stream.PatchInputStream;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class SubPlurk extends Activity {
@@ -41,7 +43,8 @@ public class SubPlurk extends Activity {
         TextView nickname_tv = (TextView) findViewById(R.id.user_info_nickname_tv);
         TextView realname_tv = (TextView) findViewById(R.id.user_info_fullname_tv);
         TextView karma_tv = (TextView) findViewById(R.id.user_info_karma_tv);
-        TextView detail_tv = (TextView) findViewById(R.id.user_info_jsdetail_tv);
+        //TextView detail_tv = (TextView) findViewById(R.id.user_info_jsdetail_tv);
+        ListView plurk_scrap_lv = (ListView) findViewById(R.id.plurk_scarp_list_lv);
         
         PlurkController con = SystemManager.getInst().getPlurkController();
         JSONObject JSONObj = null;
@@ -99,28 +102,47 @@ public class SubPlurk extends Activity {
 		
 		//detail_tv.setText(arr.toString());
 		
-		HashMap<Integer, PlurkScrap> list = new HashMap<Integer, PlurkScrap>();
+		//final HashMap<Integer, PlurkScrap> list = new HashMap<Integer, PlurkScrap>();
+		final ArrayList<PlurkScrap> list = new ArrayList<PlurkScrap>();
 		
-		LinearLayout layout = (LinearLayout) findViewById(R.id.user_info_layout);
 		for(int i = 0; i < arr.length(); ++i) {
 			PlurkScrap unit = null;
 			try {
 				unit = new PlurkScrap((JSONObject) arr.get(i));
-				PlurkScrapView view = new PlurkScrapView(this, unit);
-				layout.addView(view);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			list.put(unit.plurk_id, unit);
+			list.add(unit);
 		}
 		
-		StringBuilder sb = new StringBuilder();
-		for(Entry<Integer, PlurkScrap> e : list.entrySet())
-			sb.append(e.getValue().toString());
+		new AlertDialog.Builder(this).setTitle("Login api response info : ").setMessage(JSONObj.toString()).show();
 		
+//		StringBuilder sb = new StringBuilder();
+//		for(Entry<Integer, PlurkScrap> e : list.entrySet())
+//			sb.append(e.getValue().toString());
+		
+		plurk_scrap_lv.setAdapter(new BaseAdapter(){
 
-			
+			@Override
+			public int getCount() {
+				return list.size();
+			}
+
+			@Override
+			public Object getItem(int position) {
+				return list.get(position);
+			}
+
+			@Override
+			public long getItemId(int position) {
+				return position;
+			}
+
+			@Override
+			public View getView(int position, View convertView, ViewGroup parent) {
+				return new PlurkScrapView(SubPlurk.this, list.get(position));
+			}});		
 		
 
     }

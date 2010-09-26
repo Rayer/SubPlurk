@@ -3,12 +3,31 @@ package com.rayer.util.provisioner;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.util.Log;
-
 public abstract class FileSystemResourceProvisioner<T> implements ResourceProvisioner<T> {
+
+	@Override
+	public boolean setResource(String identificator, T targetResource) {
+		File file = new File(mCacheDir + identificator);
+		if(file.exists())
+			file.delete();
+		
+		try {
+			FileOutputStream fout = new FileOutputStream(file);
+			writeToOutputStream(targetResource, fout);
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		
+		
+		return false;
+	}
 
 	String mCacheDir;
 	
@@ -23,7 +42,7 @@ public abstract class FileSystemResourceProvisioner<T> implements ResourceProvis
 	public T getResource(String identificator) {
 		File parent = new File(mCacheDir);
 		if(parent.exists() == false) {
-			Log.d("hamibook2", "Attemp to create subdirectory :" + mCacheDir + " result : " + parent.mkdirs());
+			//Log.d("hamibook2", "Attemp to create subdirectory :" + mCacheDir + " result : " + parent.mkdirs());
 			parent.mkdirs();
 		}
 		InputStream targetInputStream = null;
@@ -58,5 +77,5 @@ public abstract class FileSystemResourceProvisioner<T> implements ResourceProvis
 	}
 	
 	public abstract T formFromStream(InputStream in);
-
+	public abstract void writeToOutputStream(T target, FileOutputStream fo);
 }

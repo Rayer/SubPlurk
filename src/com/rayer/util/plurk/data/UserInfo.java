@@ -17,7 +17,7 @@ public class UserInfo {
 	public String 	location;
 	public String 	date_of_birth;
 	public Integer 	has_profile_image;
-	public Integer 	avatar;
+	public Integer 	avatar = -1;
 	public Integer 	gender;
 	public String 	page_title;
 	public Double 	karma;
@@ -55,7 +55,7 @@ public class UserInfo {
 		if(has_profile_image == 0)
 			return "http://www.plurk.com/static/default_big.gif";
 		
-		if(avatar == null)
+		if(avatar.equals(-1) || avatar.equals(0))
 			return "http://avatars.plurk.com/" + getID() + "-big.jpg";
 		
 		return "http://avatars.plurk.com/" + getID() + "-big" + avatar + ".jpg";
@@ -65,8 +65,8 @@ public class UserInfo {
 		if(has_profile_image == 0)
 			return "http://www.plurk.com/static/default_medium.gif";
 		
-		if(avatar == null)
-			return "http://avatars.plurk.com/" + getID() + "medium.gif";
+		if(avatar.equals(-1) || avatar.equals(0))
+			return "http://avatars.plurk.com/" + getID() + "-medium.gif";
 		
 		return "http://avatars.plurk.com/" + getID() + "-medium" + avatar + ".gif";
 	}
@@ -75,7 +75,7 @@ public class UserInfo {
 		if(has_profile_image == 0)
 			return "http://www.plurk.com/static/default_small.gif";
 		
-		if(avatar == null)
+		if(avatar.equals(-1) || avatar.equals(0))
 			return "http://avatars.plurk.com/" + getID() + "-small.gif";
 		
 		return "http://avatars.plurk.com/" + getID() + "-small" + avatar + ".gif";

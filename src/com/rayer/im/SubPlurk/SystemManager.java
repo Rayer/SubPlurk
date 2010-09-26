@@ -5,13 +5,17 @@ import com.rayer.util.plurk.PlurkController;
 import com.rayer.util.plurk.data.PublicUserInfo;
 import com.rayer.util.provisioner.ResourceProvisioner;
 
+/**
+ * Storage of some global variables, or system-dependent services.
+ * @author rayer
+ *
+ */
 public class SystemManager extends EventManager {
 	
 	SystemManager() {
 		super();
 		
 	}
-		
 
 	static SystemManager msDefaultInst;
 	public static SystemManager getInst() {

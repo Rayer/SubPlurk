@@ -1,7 +1,9 @@
 package com.rayer.util.plurk;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -13,12 +15,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.rayer.util.network.PostObject;
 import com.rayer.util.plurk.data.PublicUserInfo;
 import com.rayer.util.plurk.data.UserInfo;
+import com.rayer.util.provisioner.FileSystemResourceProvisioner;
 import com.rayer.util.provisioner.InternetResourceProvisioner;
 import com.rayer.util.provisioner.MemoryCacheResourceProvisioner;
 import com.rayer.util.provisioner.ResourceProvisioner;
@@ -37,8 +41,8 @@ public class PlurkController implements PlurkInterface {
 	ResourceProvisioner<PublicUserInfo> mUserInfoCache;
 	ResourceProvisioner<PublicUserInfo> mInternetUserInfoProvisioner;
 	
+	ResourceProvisioner<Bitmap> mUserAvatarFileSystemCacheMedium;
 	ResourceProvisioner<Bitmap> mUserAvatarCacheMedium;
-	ResourceProvisioner<Bitmap> mInternetUserAvatarProviderMedium;
 	
 //	EventManager mEventManager = SystemManager.getInst();
 //	EventProcessHandler mHandler = new EventProcessHandler();
@@ -78,6 +82,21 @@ public class PlurkController implements PlurkInterface {
 				// TODO Auto-generated method stub
 				return false;
 			}};
+		
+		mUserAvatarFileSystemCacheMedium = new FileSystemResourceProvisioner<Bitmap>("./sdcard/.subplurk/cache/medium/") {
+
+			@Override
+			public Bitmap formFromStream(InputStream in) {
+				return BitmapFactory.decodeStream(in);
+			}
+
+			@Override
+			public void writeToOutputStream(Bitmap target, FileOutputStream fo) {
+				
+				target.compress(CompressFormat.PNG, 100, fo);
+
+			}
+		};
 			
 		mUserAvatarCacheMedium = new MemoryCacheResourceProvisioner<Bitmap>(){
 
@@ -226,12 +245,12 @@ public class PlurkController implements PlurkInterface {
 				return "" + uid;
 			}};
 			
-		rp.addProvisioner(mInternetUserAvatarProviderMedium);
+		rp.addProvisioner(mUserAvatarFileSystemCacheMedium);
+		rp.addProvisioner(mUserAvatarCacheMedium);
 		rp.addProvisioner(new InternetResourceProvisioner<Bitmap>(){
 
 			@Override
 			public Bitmap formFromStream(InputStream is) {
-				// TODO Auto-generated method stub
 				return BitmapFactory.decodeStream(is);
 			}
 
@@ -243,6 +262,12 @@ public class PlurkController implements PlurkInterface {
 			}});
 			
 			return rp.getResource(null);
+	}
+
+	@Override
+	public void getResponser(int plurk_id, int offset) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

@@ -1,0 +1,10 @@
+
+
+Any plurk scraps in my timeline, we can assumed all of them are from friends. So if we get friend first, we can access avatar urls without querying plurk's owner's 
+whole timeline(to get user_data structure)
+
+load and update friend list and fetch their's avatar first.
+
+Make a storage database to put avatar cache of friends, a FileSystemResourceProvisioner seems a good choice(or maybe InternetResourceProvisionerToFile?)
+
+ 

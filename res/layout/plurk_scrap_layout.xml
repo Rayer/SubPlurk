@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="wrap_content">
   
-<ImageView android:id="@+id/plurk_scrap_portrait_ib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentLeft="true"></ImageView>
-<WebView android:id="@+id/plurk_scrap_message_tv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignLeft="@+id/plurk_scrap_portrait_ib"/>
+	<ImageView android:id="@+id/plurk_scrap_portrait_ib" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentLeft="true" />
+	<RelativeLayout android:id="@+id/RelativeLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<WebView android:id="@+id/plurk_scrap_message_tv" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignLeft="@+id/plurk_scrap_portrait_ib"/>
+		<TextView android:id="@+id/plurk_scrap_reply_count_tv" android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+	</RelativeLayout>
+	<ListView android:id="@+id/plurk_scrap_replyviews_lv" android:paddingLeft="40px" android:layout_width="fill_parent" android:layout_height="wrap_content" android:visibility="gone"/>
 
 </LinearLayout>
