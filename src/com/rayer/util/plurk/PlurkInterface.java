@@ -1,11 +1,13 @@
 package com.rayer.util.plurk;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 
 import com.rayer.util.network.PostObject;
+import com.rayer.util.plurk.data.PlurkScrap;
 import com.rayer.util.plurk.data.PublicUserInfo;
 import com.rayer.util.plurk.data.UserInfo;
 
@@ -52,6 +54,6 @@ public interface PlurkInterface {
 	 * @param plurk_id
 	 * @param offset optional, it means only fetch responses from an offset - could be 0(no offset set), 5, 10 or 15.
 	 */
-	void getResponser(int plurk_id, int offset);
+	 ArrayList<PlurkScrap> getResponser(int plurk_id, int offset);
 	
 }

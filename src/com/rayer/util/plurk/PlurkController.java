@@ -3,7 +3,7 @@ package com.rayer.util.plurk;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -11,6 +11,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.rayer.util.network.PostObject;
+import com.rayer.util.plurk.data.PlurkScrap;
 import com.rayer.util.plurk.data.PublicUserInfo;
 import com.rayer.util.plurk.data.UserInfo;
 import com.rayer.util.provisioner.FileSystemResourceProvisioner;
@@ -265,9 +267,32 @@ public class PlurkController implements PlurkInterface {
 	}
 
 	@Override
-	public void getResponser(int plurk_id, int offset) {
-		// TODO Auto-generated method stub
+	public ArrayList<PlurkScrap> getResponser(int plurk_id, int offset) {
+		PostObject post = new PostObject("Responses/get", "plurk_id", "" + plurk_id, "from_response", offset == 0 ? "" : "" + offset);
+		HttpGet get = new HttpGet(post.toString());
+		ResponseHandler<String> res = new BasicResponseHandler();
+		ArrayList<PlurkScrap> retArray = new ArrayList<PlurkScrap>();
 		
+		try {
+			String ret = mClient.execute(get, res);
+			JSONObject json = new JSONObject(ret);
+			
+			JSONArray arr = json.getJSONArray("responses");
+			for(int counter = 0; counter < arr.length(); ++counter)
+				retArray.add(new PlurkScrap((JSONObject)arr.get(counter)));
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retArray;
 	}
 
 
