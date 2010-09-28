@@ -3,7 +3,6 @@ package com.rayer.util.plurk;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
