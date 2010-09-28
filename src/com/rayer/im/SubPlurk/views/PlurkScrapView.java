@@ -40,7 +40,7 @@ public class PlurkScrapView extends RelativeLayout {
 		
 		//mContentTV.loadData(scrap.content, "text/html", "utf-8");
 		mContentWV.loadDataWithBaseURL(null, scrap.content, "text/html", "utf-8", null);
-		mPortraitIV.setImageBitmap(SystemManager.getInst().getPlurkController().getPortraitMedium(scrap.owner_id));
+		//mPortraitIV.setImageBitmap(SystemManager.getInst().getPlurkController().getPortraitMedium(scrap.owner_id));
 		
 		setReadingState(scrap.is_unread == 1, scrap.response_count);
 		//setReadingState()
@@ -56,7 +56,7 @@ public class PlurkScrapView extends RelativeLayout {
 				
 				
 				PlurkController pc = SystemManager.getInst().getPlurkController();
-				ArrayList<PlurkScrap> scrapList = pc.getResponser(scrap.plurk_id, 0);
+				ArrayList<PlurkScrap> scrapList = pc.getResponses(scrap.plurk_id, 0);
 				StringBuilder sb = new StringBuilder();
 				for(PlurkScrap s : scrapList)
 					sb.append(s.toString() + " / ");
@@ -77,7 +77,7 @@ public class PlurkScrapView extends RelativeLayout {
 				
 				
 				PlurkController pc = SystemManager.getInst().getPlurkController();
-				ArrayList<PlurkScrap> scrapList = pc.getResponser(scrap.plurk_id, 0);
+				ArrayList<PlurkScrap> scrapList = pc.getResponses(scrap.plurk_id, 0);
 				StringBuilder sb = new StringBuilder();
 				for(PlurkScrap s : scrapList)
 					sb.append(s.toString() + " / ");

@@ -1,13 +1,10 @@
 package com.rayer.util.plurk;
 
 import java.io.IOException;
-
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 
-import com.rayer.im.SubPlurk.SystemManager;
 import com.rayer.util.event.EventManager;
-import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.events.OnPlurkLogin;
 
 /**
@@ -16,23 +13,22 @@ import com.rayer.util.plurk.events.OnPlurkLogin;
  * @author rayer
  *
  */
-public class PlurkControllerMT {
+public class PlurkControllerMT extends PlurkController {
 
-	EventProcessHandler mHandler = new EventProcessHandler();
-	EventManager mEventManager = SystemManager.getInst();
+	EventManager mEventManager;
 	
-	PlurkController mController = new PlurkController();
-	
-	public PlurkControllerMT() {
-		//mEventManager.registerHandler(OnPlurkLogin.class, mHandler);
+	public PlurkControllerMT(EventManager em) {
+		mEventManager = em;
 	}
 	
 	/**
-	 * 
-	 * @param username
-	 * @param password
+	 * login - async version.
+	 * @param username PlurkID or e-mail
+	 * @param password Plurk password
+	 * @see login
+	 * @see com.rayer.util.plurk.events.OnPlurkLogin
 	 */
-	public void Login(final String username, final String password) {
+	public synchronized void async_login(final String username, final String password) {
 		
 		mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.ATTEMPING_LOGIN));
 		
@@ -41,21 +37,23 @@ public class PlurkControllerMT {
 			@Override
 			public void run() {
 				JSONObject retObj = null;
+				
 				try {
-					retObj = mController.login(username, password);
+					retObj = login(username, password);
 				} catch (ClientProtocolException e) {
 					mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_CERTIFICATION_ERROR));
 					e.printStackTrace();
+					return;
 				} catch (IOException e) {
 					mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_TIMEOUT));
 					e.printStackTrace();
+					return;
 				}
 				
 				mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_SUCCESS).setJSONObject(retObj));
 			}});
+
 		thread.start();
 	}
-	
-	
-
+		
 }

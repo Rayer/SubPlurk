@@ -7,16 +7,16 @@ import com.rayer.util.event.EventParamBase;
 
 public class OnPlurkLogin extends EventBase {
 
-	public static int ATTEMPING_LOGIN = 0;
-	public static int LOGIN_SUCCESS = 1;
-	public static int LOGIN_CERTIFICATION_ERROR = 2;
-	public static int LOGIN_TIMEOUT = 3;
+	public static final int ATTEMPING_LOGIN = 0;
+	public static final int LOGIN_SUCCESS = 1;
+	public static final int LOGIN_CERTIFICATION_ERROR = 2;
+	public static final int LOGIN_TIMEOUT = 3;
 	
 	int mLoginStatus = 0;
 	JSONObject mRetObj = null;
 	
 	public OnPlurkLogin(int loginStatus) {
-		mLoginStatus = 0;
+		mLoginStatus = loginStatus;
 	}
 	
 	public OnPlurkLogin setJSONObject(JSONObject retObj) {

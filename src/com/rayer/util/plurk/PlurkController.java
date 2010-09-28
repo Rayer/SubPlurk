@@ -3,6 +3,7 @@ package com.rayer.util.plurk;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.apache.http.client.ClientProtocolException;
@@ -31,7 +32,7 @@ import com.rayer.util.provisioner.ResourceProvisioner;
 import com.rayer.util.provisioner.ResourceProxy;
 
 /**
- * 這個版本是無Multi-thread的版本的實作，後面要再做一個把他包起來
+ * 這個版本是Single thread的版本的實作，後面要再做一個把他包起來
  * @author rayer
  *
  */
@@ -239,12 +240,17 @@ public class PlurkController implements PlurkInterface {
 	public Bitmap getPortraitMedium(final int uid) {
 		
 		final PublicUserInfo info = getPublicProfile(uid);
+		return getPortraitMedium(info);
+
+	}
+	
+	public Bitmap getPortraitMedium(final PublicUserInfo info) {
 		
 		ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>(){
 
 			@Override
 			public String getIndentificator() {
-				return "" + uid;
+				return "" + info.getUserInfo().uid;
 			}};
 			
 		rp.addProvisioner(mUserAvatarFileSystemCacheMedium);
@@ -267,7 +273,7 @@ public class PlurkController implements PlurkInterface {
 	}
 
 	@Override
-	public ArrayList<PlurkScrap> getResponser(int plurk_id, int offset) {
+	public ArrayList<PlurkScrap> getResponses(int plurk_id, int offset) {
 		PostObject post = new PostObject("Responses/get", "plurk_id", "" + plurk_id, "from_response", offset == 0 ? "" : "" + offset);
 		HttpGet get = new HttpGet(post.toString());
 		ResponseHandler<String> res = new BasicResponseHandler();
@@ -282,18 +288,54 @@ public class PlurkController implements PlurkInterface {
 				retArray.add(new PlurkScrap((JSONObject)arr.get(counter)));
 			
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return retArray;
 	}
+
+	//最好別用這東西
+	@Override
+	public JSONObject getPlurks(String offset, String string, String filter) {
+		PostObject post = new PostObject("Timeline/getPlurks", "offset", offset, "limit", "" + string, "filter", filter);
+		HttpGet get = new HttpGet(post.toString());
+		ResponseHandler<String> res = new BasicResponseHandler();
+
+		JSONObject json = null;
+		try {
+			String ret = mClient.execute(get, res);
+			json = new JSONObject(ret);
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
+	
+	public void startFillingFriendAvatarCache(JSONObject obj) {
+		try {
+			Log.d("SubPlurk", "plurk users request is : " + obj.toString());
+			JSONArray array = obj.getJSONArray("plurk_users");
+			for(int counter = 0; counter < array.length(); ++counter) {
+				PublicUserInfo pui = new PublicUserInfo((JSONObject)array.getJSONObject(counter));
+				this.getPortraitMedium(pui);
+			}
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 
 

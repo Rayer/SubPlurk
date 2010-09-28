@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:orientation="vertical" android:layout_width="fill_parent">
+  
+  <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+  <TextView android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="Plurk ID" android:minWidth="100px"/>
+  <EditText android:id="@+id/login_splash_plurkid_et" android:layout_height="wrap_content" android:layout_width="300px"/>
+  </LinearLayout>
+  
+  <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+  <TextView android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="Password" android:minWidth="100px"/>
+  <EditText android:id="@+id/login_splash_plurkpass_et" android:layout_height="wrap_content" android:layout_width="300px"/>
+  </LinearLayout>
+  
+  
 
-</RelativeLayout>
+  <Button android:text="Let's Rock!" android:id="@+id/login_splash_login_btn" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -23,5 +23,6 @@ public abstract class EventParamBase {
 		msg.arg2 = getArg2();
 		msg.obj = getObj();
 	}
+	
 
 }

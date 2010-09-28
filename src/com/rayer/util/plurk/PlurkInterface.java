@@ -54,6 +54,15 @@ public interface PlurkInterface {
 	 * @param plurk_id
 	 * @param offset optional, it means only fetch responses from an offset - could be 0(no offset set), 5, 10 or 15.
 	 */
-	 ArrayList<PlurkScrap> getResponser(int plurk_id, int offset);
+	 ArrayList<PlurkScrap> getResponses(int plurk_id, int offset);
+	 
+	 /**
+	  * Implementation of /API/Timeline/getPlurks
+	  * @param offset optional, Return plurks older than offset, formatted as 2009-6-20T21:55:34.
+	  * @param limit How many plurks should be returned? Default is 20.
+	  * @param filter Can be only_user, only_responded, only_private or only_favorite.
+	  * @return
+	  */
+	 JSONObject getPlurks(String offset, String limit, String filter);
 	
 }
