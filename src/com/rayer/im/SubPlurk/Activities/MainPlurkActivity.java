@@ -130,7 +130,13 @@ public class MainPlurkActivity extends Activity {
 
 			@Override
 			public View getView(int position, View convertView, ViewGroup parent) {
+				//return new PlurkScrapView(MainPlurkActivity.this, list.get(position));
+				if(convertView != null)
+					return ((PlurkScrapView)convertView).initFromScrap(list.get(position));
+				
 				return new PlurkScrapView(MainPlurkActivity.this, list.get(position));
+
+				
 			}});		
 
 

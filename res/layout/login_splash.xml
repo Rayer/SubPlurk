@@ -14,7 +14,8 @@
   <EditText android:id="@+id/login_splash_plurkpass_et" android:layout_height="wrap_content" android:layout_width="300px"/>
   </LinearLayout>
   
-  
+  <com.rayer.views.SparklingView android:id="@+id/login_splash_gps_sv" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
 
   <Button android:text="Let's Rock!" android:id="@+id/login_splash_login_btn" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 </LinearLayout>

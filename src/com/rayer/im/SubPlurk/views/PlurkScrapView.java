@@ -33,6 +33,15 @@ public class PlurkScrapView extends RelativeLayout {
 		LayoutInflater li = LayoutInflater.from(context);
 		li.inflate(R.layout.plurk_scrap_layout, this);
 		
+
+		
+		initFromScrap(scrap);
+		
+		
+	}
+
+	public View initFromScrap(final PlurkScrap scrap) {
+		
 		mPortraitIV =(ImageView) findViewById(R.id.plurk_scrap_portrait_ib);
 		mContentWV = (WebView) findViewById(R.id.plurk_scrap_message_tv);
 		mReadingCountTV = (TextView) findViewById(R.id.plurk_scrap_reply_count_tv);
@@ -40,7 +49,7 @@ public class PlurkScrapView extends RelativeLayout {
 		
 		//mContentTV.loadData(scrap.content, "text/html", "utf-8");
 		mContentWV.loadDataWithBaseURL(null, scrap.content, "text/html", "utf-8", null);
-		//mPortraitIV.setImageBitmap(SystemManager.getInst().getPlurkController().getPortraitMedium(scrap.owner_id));
+		mPortraitIV.setImageBitmap(SystemManager.getInst().getPlurkController().getPortraitMedium(scrap.owner_id));
 		
 		setReadingState(scrap.is_unread == 1, scrap.response_count);
 		//setReadingState()
@@ -65,28 +74,8 @@ public class PlurkScrapView extends RelativeLayout {
 				
 			}});
 		
-		//for debug only
-		mContentWV.setOnLongClickListener(new OnLongClickListener(){
-
-			@Override
-			public boolean onLongClick(View v) {
-				Log.d("SubPlurk", "Attemping getting response id : " + scrap.plurk_id);
-
-				if(scrap.response_count == 0)
-					return false;
-				
-				
-				PlurkController pc = SystemManager.getInst().getPlurkController();
-				ArrayList<PlurkScrap> scrapList = pc.getResponses(scrap.plurk_id, 0);
-				StringBuilder sb = new StringBuilder();
-				for(PlurkScrap s : scrapList)
-					sb.append(s.toString() + " / ");
-				
-				new AlertDialog.Builder(getContext()).setTitle("Response debug info").setMessage(sb.toString()).show();
-				return false;
-			}});
 		
-		
+		return this;
 	}
 	
 	void setReadingState(boolean isUnread, int count) {
