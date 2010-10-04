@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -20,6 +22,7 @@ import com.rayer.im.SubPlurk.Activities.MainPlurkActivity;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.PlurkControllerMT;
 import com.rayer.util.plurk.events.OnPlurkLogin;
+import com.rayer.views.SparklingView;
 
 public class SubPlurk extends Activity {
 	
@@ -69,6 +72,7 @@ public class SubPlurk extends Activity {
     EditText mPlurkidET;
     EditText mPlurkPassET;
     Button mLoginBtn;
+    SparklingView mGPSIndicator;
     
     ProgressDialog mPd;
     
@@ -90,6 +94,7 @@ public class SubPlurk extends Activity {
         mPlurkidET = (EditText) findViewById(R.id.login_splash_plurkid_et);
         mPlurkPassET = (EditText) findViewById(R.id.login_splash_plurkpass_et);
         mLoginBtn = (Button) findViewById(R.id.login_splash_login_btn);
+        mGPSIndicator = (SparklingView) findViewById(R.id.login_splash_gps_sv);
         
         mPd = new ProgressDialog(this);
         mPd.setTitle("Logging in to Plurk");
@@ -106,5 +111,11 @@ public class SubPlurk extends Activity {
 				mController.async_login("killercat", "2jriojdi");
 
 			}});
+        
+        Bitmap sparkle = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+        mGPSIndicator.setSparklingBitmaps(sparkle, null);
+        mGPSIndicator.setIndicatorText("GPS Status : On");
+        mGPSIndicator.startSparkling();
+        
     }
 }

@@ -7,12 +7,12 @@ import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
 
-public class SparklingView extends RelativeLayout {
+public class SparklingView extends LinearLayout {
 	
 	public SparklingView(Context context) {
 		super(context);
@@ -23,9 +23,6 @@ public class SparklingView extends RelativeLayout {
 		super(context, attrs);
 		initialize();
 	}
-	//id
-	//any better solve?
-	static final int CONSTANCE_IMAGEVIEW_ID = 9999;
 	
 	//what
 	static final int SPARKLING_CHANGE_COLOR = 0;
@@ -64,11 +61,11 @@ public class SparklingView extends RelativeLayout {
 		mDescriptionHolder = new TextView(getContext());
 		
 		LayoutParams imageLayoutParams = new LayoutParams(mSparklingImageSizeWidth, mSparklingImageSizeHeight);
-		imageLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
-		mSparklingImageIV.setId(CONSTANCE_IMAGEVIEW_ID);
+		//imageLayoutParams.addRule(RelativeLayout.ALIGN_LEFT);
+		//mSparklingImageIV.setId(CONSTANCE_IMAGEVIEW_ID);
 		
 		LayoutParams textLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		imageLayoutParams.addRule(LEFT_OF, CONSTANCE_IMAGEVIEW_ID);
+		//imageLayoutParams.addRule(LEFT_OF, CONSTANCE_IMAGEVIEW_ID);
 		
 		addView(mSparklingImageIV, imageLayoutParams);
 		addView(mDescriptionHolder, textLayoutParams);
@@ -87,6 +84,22 @@ public class SparklingView extends RelativeLayout {
 	public void setSparklingBitmaps(Bitmap one, Bitmap two) {
 		mSparklingImage1 = one;
 		mSparklingImage2 = two;
+	}
+	
+	public void setIndicatorText(String text) {
+		mDescriptionHolder.setText(text);
+	}
+	
+	public void startSparkling() {
+		if(mMaintainingThread != null)
+			mMaintainingThread.terminate();
+		
+		mMaintainingThread = new ControlThread();
+		mMaintainingThread.start();
+	}
+	
+	public void stopSparkling() {
+		mMaintainingThread.terminate();
 	}
 	
 	
@@ -115,7 +128,5 @@ public class SparklingView extends RelativeLayout {
 			}
 			super.run();
 		}
-		
-		
 	}
 }
