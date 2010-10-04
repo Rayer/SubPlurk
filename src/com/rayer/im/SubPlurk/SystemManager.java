@@ -1,6 +1,9 @@
 package com.rayer.im.SubPlurk;
 
+import android.content.Context;
+
 import com.rayer.util.event.EventManager;
+import com.rayer.util.gps.LocationService;
 import com.rayer.util.plurk.PlurkControllerMT;
 import com.rayer.util.plurk.data.PublicUserInfo;
 import com.rayer.util.provisioner.ResourceProvisioner;
@@ -14,7 +17,6 @@ public class SystemManager extends EventManager {
 	
 	SystemManager() {
 		super();
-		
 	}
 
 	static SystemManager msDefaultInst;
@@ -25,13 +27,20 @@ public class SystemManager extends EventManager {
 		return msDefaultInst;
 	}
 	
+	Context mContext;
+	
+	public void init(Context context) {
+		mContext = context;
+		mLocation.init(mContext, this);	
+	}
+	
 	//PlurkController mController = new PlurkController();
 	PlurkControllerMT mControllerMT = new PlurkControllerMT(this);
+	LocationService mLocation = new LocationService();
 	
 	ResourceProvisioner<PublicUserInfo> mUserInfoCache;
-	
-	
 	public PlurkControllerMT getPlurkController() {
 		return mControllerMT;
 	}
+	
 }

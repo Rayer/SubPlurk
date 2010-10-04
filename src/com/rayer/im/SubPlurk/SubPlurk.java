@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.rayer.im.SubPlurk.Activities.MainPlurkActivity;
 import com.rayer.util.event.EventProcessHandler;
+import com.rayer.util.gps.OnLocationServiceInit;
 import com.rayer.util.plurk.PlurkControllerMT;
 import com.rayer.util.plurk.events.OnPlurkLogin;
 import com.rayer.views.SparklingView;
@@ -37,7 +38,22 @@ public class SubPlurk extends Activity {
 			
 			if(identificator == OnPlurkLogin.class.hashCode())
 				processLogin(msg);
+			else if (identificator == OnLocationServiceInit.class.hashCode())
+				processGPS(msg);
 
+		}
+
+		private void processGPS(Message msg) {
+			int status = msg.arg1;
+			switch(status) {
+			case OnLocationServiceInit.START_INITIALIZATION:
+				mGPSIndicator.setIndicatorText("Trying initialization GPS...");
+				break;
+			case OnLocationServiceInit.INITIALIZATION_WITH_GPS:
+				setGPSIndicatorOn();
+				break;
+			default:
+			}
 		}
 
 		private void processLogin(Message msg) {
@@ -85,16 +101,19 @@ public class SubPlurk extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_splash);
         
-        mSys = SystemManager.getInst();
-        mController = mSys.getPlurkController();
-        mSys.registerHandler(OnPlurkLogin.class, mHandler);
-        
-        
-        
         mPlurkidET = (EditText) findViewById(R.id.login_splash_plurkid_et);
         mPlurkPassET = (EditText) findViewById(R.id.login_splash_plurkpass_et);
         mLoginBtn = (Button) findViewById(R.id.login_splash_login_btn);
         mGPSIndicator = (SparklingView) findViewById(R.id.login_splash_gps_sv);
+        
+        mSys = SystemManager.getInst();
+        mController = mSys.getPlurkController();
+        mSys.registerHandler(OnPlurkLogin.class, mHandler);
+        mSys.registerHandler(OnLocationServiceInit.class, mHandler);
+        
+        mSys.init(this);
+        
+
         
         mPd = new ProgressDialog(this);
         mPd.setTitle("Logging in to Plurk");
@@ -104,18 +123,21 @@ public class SubPlurk extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				//mController.async_login(mPlurkidET.getText().toString(), mPlurkPassET.getText().toString());
+				mController.async_login(mPlurkidET.getText().toString(), mPlurkPassET.getText().toString());
 				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(mPlurkPassET.getWindowToken(), 0);
 				
-				mController.async_login("killercat", "2jriojdi");
 
 			}});
         
-        Bitmap sparkle = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-        mGPSIndicator.setSparklingBitmaps(sparkle, null);
-        mGPSIndicator.setIndicatorText("GPS Status : On");
-        mGPSIndicator.startSparkling();
+        //setGPSIndicatorOn();
         
     }
+
+	private void setGPSIndicatorOn() {
+		Bitmap sparkle = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+        mGPSIndicator.setSparklingBitmaps(sparkle, null);
+        mGPSIndicator.setIndicatorText("GPS Status : Good");
+        mGPSIndicator.startSparkling();
+	}
 }
