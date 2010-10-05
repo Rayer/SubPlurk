@@ -40,6 +40,7 @@ public class SubPlurk extends Activity {
 				processLogin(msg);
 			else if (identificator == OnLocationServiceInit.class.hashCode())
 				processGPS(msg);
+			
 
 		}
 
@@ -47,7 +48,10 @@ public class SubPlurk extends Activity {
 			int status = msg.arg1;
 			switch(status) {
 			case OnLocationServiceInit.START_INITIALIZATION:
-				mGPSIndicator.setIndicatorText("Trying initialization GPS...");
+				mGPSIndicator.setIndicatorText("Trying to get your GPS signal...");
+				Bitmap bm = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_delete);
+				mGPSIndicator.setSparklingBitmaps(bm, null);
+				mGPSIndicator.startSparkling();
 				break;
 			case OnLocationServiceInit.INITIALIZATION_WITH_GPS:
 				setGPSIndicatorOn();
@@ -135,7 +139,7 @@ public class SubPlurk extends Activity {
     }
 
 	private void setGPSIndicatorOn() {
-		Bitmap sparkle = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+		Bitmap sparkle = BitmapFactory.decodeResource(getResources(), android.R.drawable.presence_online);
         mGPSIndicator.setSparklingBitmaps(sparkle, null);
         mGPSIndicator.setIndicatorText("GPS Status : Good");
         mGPSIndicator.startSparkling();

@@ -184,24 +184,6 @@ public class LocationService implements LocationListener{
 		return true;
 	}
 
-//	private void processNoGPSDevice() {
-//		LinearLayout layout = new LinearLayout(mContext);
-//		ImageView iv = new ImageView(mContext);
-//		iv.setImageResource(android.R.drawable.stat_notify_error);
-//		
-//		TextView tv = new TextView(mContext);
-//		tv.setText("ÁÑ°Ê≥ïÂïüÂãïÊÇ®ÁöÑGPSË£ùÁΩÆÔºåÁèæÂú®Â∞áÂàáÊèõÂà∞ÊâãÂãïÂÆö‰ΩçÊ®°Âºè.");
-//		
-//		layout.addView(iv);
-//		layout.addView(tv);
-//		
-//		Toast toast = new Toast(mContext);
-//		toast.setDuration(Toast.LENGTH_LONG);
-//		toast.setView(layout);
-//		toast.show();
-//		mUseAutoPosition = false;
-//	}
-//	
 	public void disableService()
 	{
 		mLocMgr.removeUpdates(this);
@@ -240,6 +222,7 @@ public class LocationService implements LocationListener{
 
 	@Override
 	final public void onProviderDisabled(String provider) {
+
 		
 	}
 
