@@ -12,7 +12,7 @@ import android.os.Message;
  * @author rayer
  *
  */
-public class EventManager {
+public class EventManager implements EventManagerInterface {
 	HashMap<Class<? extends EventBase>, ArrayList<EventProcessHandler> > mEventHandlerMap = new HashMap<Class<? extends EventBase>, ArrayList<EventProcessHandler> >();
 	
 	/**
@@ -23,12 +23,10 @@ public class EventManager {
 		
 	}
 	
-	/**
-	 * Register a handler to an event.
-	 * @param event
-	 * @param eph
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.rayer.util.event.EventManagerInterface#registerHandler(java.lang.Class, com.rayer.util.event.EventProcessHandler)
 	 */
+	@Override
 	public boolean registerHandler(Class<? extends EventBase> event, EventProcessHandler eph) {
 		//int id = event.hashCode();
 		ArrayList<EventProcessHandler> handlerList = null;
@@ -46,20 +44,17 @@ public class EventManager {
 			return false;
 		
 		handlerList.add(eph);
-		
-		
+		eph.addMonitoringEvents(this, event);
 
 		return true;
 	}
 	
 	//要不要增加一個通知EventProcessHandler「你被fire啦挖哈哈哈哈哈哈」的訊息呢(思考)
-	/**
-	 * Remove a notification handler in specified event. In most case you should use it to safely remove handler.
-	 * @param event
-	 * @param eph
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.rayer.util.event.EventManagerInterface#removeHandler(com.rayer.util.event.EventBase, com.rayer.util.event.EventProcessHandler)
 	 */
-	boolean removeHandler(EventBase event, EventProcessHandler eph) {
+	@Override
+	public boolean removeHandler(EventBase event, EventProcessHandler eph) {
 		ArrayList<EventProcessHandler> handlerList = mEventHandlerMap.get(event.getID());
 		if(handlerList == null)
 			return false;
@@ -90,12 +85,11 @@ public class EventManager {
 		eph.sendMessage(msg);
 	}
 
-	/**
-	 * Strip a whole event out of notification list. WARNING : Use it carefully.
-	 * @param event
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.rayer.util.event.EventManagerInterface#removeHandler(com.rayer.util.event.EventBase)
 	 */
-	boolean removeHandler(EventBase event) {
+	@Override
+	public boolean removeHandler(EventBase event) {
 		return mEventHandlerMap.remove(event.getID()) != null;
 	}
 	
@@ -114,6 +108,10 @@ public class EventManager {
 		return ret;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.rayer.util.event.EventManagerInterface#sendMessage(com.rayer.util.event.EventBase)
+	 */
+	@Override
 	public boolean sendMessage(EventBase base) {
 		
 		ArrayList<EventProcessHandler> handlerList = mEventHandlerMap.get(base.getClass());
@@ -138,11 +136,13 @@ public class EventManager {
 		return true;
 	}
 	
-	/**
-	 * 	Reset this event handler.
-	 * @param notifyHandler true if you want to send HandlerRemoveEvent, false for otherwise.
+	/* (non-Javadoc)
+	 * @see com.rayer.util.event.EventManagerInterface#reset(boolean)
 	 */
+	@Override
 	public void reset(boolean notifyHandler) {
+		//還要通知所有handler你被解除了
+		
 		mEventHandlerMap = new HashMap<Class<? extends EventBase>, ArrayList<EventProcessHandler> >();;
 	}
 

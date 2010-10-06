@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
 
-import com.rayer.util.event.EventManager;
+import com.rayer.util.event.EventManagerInterface;
 import com.rayer.util.plurk.events.OnPlurkLogin;
 
 /**
@@ -15,9 +15,9 @@ import com.rayer.util.plurk.events.OnPlurkLogin;
  */
 public class PlurkControllerMT extends PlurkController {
 
-	EventManager mEventManager;
+	EventManagerInterface mEventManager;
 	
-	public PlurkControllerMT(EventManager em) {
+	public PlurkControllerMT(EventManagerInterface em) {
 		mEventManager = em;
 	}
 	

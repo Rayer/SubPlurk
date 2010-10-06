@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
-import com.rayer.util.event.EventManager;
+import com.rayer.util.event.EventManagerInterface;
 import com.rayer.util.gps.OnLocationUpdate.UpdateType;
 
 public class LocationService implements LocationListener{
@@ -41,7 +41,7 @@ public class LocationService implements LocationListener{
 	
 	LocationManager mLocMgr;
 	Context mContext;
-	EventManager mEm;
+	EventManagerInterface mEm;
 	
 	/**
 	 * 
@@ -49,7 +49,7 @@ public class LocationService implements LocationListener{
 	 * @param em EventManager, if set to null, it will never send any message via EventManager
 	 * @return
 	 */
-	public boolean init(Context context, EventManager em)
+	public boolean init(Context context, EventManagerInterface em)
 	{
 		mContext = context;
 		mEm = em;

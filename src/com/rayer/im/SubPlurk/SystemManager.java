@@ -42,5 +42,8 @@ public class SystemManager extends EventManager {
 	public PlurkControllerMT getPlurkController() {
 		return mControllerMT;
 	}
+	public LocationService getLocationService() {
+		return mLocation;
+	}
 	
 }

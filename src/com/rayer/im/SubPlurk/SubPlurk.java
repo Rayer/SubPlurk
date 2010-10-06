@@ -27,7 +27,9 @@ import com.rayer.views.SparklingView;
 
 public class SubPlurk extends Activity {
 	
-    EventProcessHandler mHandler = new EventProcessHandler(){
+
+
+	EventProcessHandler mHandler = new EventProcessHandler(){
 
 		@Override
 		public void handleMessage(Message msg) {
@@ -137,6 +139,12 @@ public class SubPlurk extends Activity {
         //setGPSIndicatorOn();
         
     }
+    
+    @Override
+	protected void onStop() {
+    	mSys.getLocationService().disableService();
+		super.onStop();
+	}
 
 	private void setGPSIndicatorOn() {
 		Bitmap sparkle = BitmapFactory.decodeResource(getResources(), android.R.drawable.presence_online);
