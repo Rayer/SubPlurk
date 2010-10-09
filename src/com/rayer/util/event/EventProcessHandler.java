@@ -2,6 +2,9 @@ package com.rayer.util.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import android.os.Handler;
 import android.os.Message;
 
@@ -38,8 +41,8 @@ public class EventProcessHandler extends Handler {
 	}
 	
 	public ArrayList<Class<? extends EventBase> > getListeningEvents() {
-		return null;
 		
+		return null;
 	}
 	
 	public void wipeFromEventManager(EventManagerInterface em) {
@@ -59,9 +62,20 @@ public class EventProcessHandler extends Handler {
 	
 	@Override
 	public String toString() {
-		//super.toString();
+		StringBuilder sb = new StringBuilder();
+		Set<EventManagerInterface> keySet = mMonitoringEventMap.keySet();
+		for(EventManagerInterface e : keySet) {
+			sb.append("EventManagerInterface #");
+			sb.append(e.getName());
+			ArrayList<Class<? extends EventBase> > targetArray = mMonitoringEventMap.get(e);
+			Iterator<Class<? extends EventBase>> iter = targetArray.iterator();
+			while(iter.hasNext()) {
+				sb.append(iter.next().getName());
+				sb.append(" ");
+			}
+		}
 		
-		return super.toString();
+		return sb.toString();
 	}
 	
 

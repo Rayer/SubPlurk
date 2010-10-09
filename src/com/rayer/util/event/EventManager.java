@@ -54,14 +54,16 @@ public class EventManager implements EventManagerInterface {
 	 * @see com.rayer.util.event.EventManagerInterface#removeHandler(com.rayer.util.event.EventBase, com.rayer.util.event.EventProcessHandler)
 	 */
 	@Override
-	public boolean removeHandler(EventBase event, EventProcessHandler eph) {
-		ArrayList<EventProcessHandler> handlerList = mEventHandlerMap.get(event.getID());
+	public boolean removeHandler(Class<? extends EventBase> event, EventProcessHandler eph) {
+		ArrayList<EventProcessHandler> handlerList = mEventHandlerMap.get(event);
 		if(handlerList == null)
 			return false;
 		
 		boolean ret = handlerList.remove(eph);
-		if(ret == true)
+		if(ret == true) {
 			this.sendMessageToSpecifiedHandler(eph, new OnHandlerDetachedEvent());
+			eph.removeMonitoringEvents(this, event);
+		}
 		
 		return ret;
 	}
@@ -144,6 +146,11 @@ public class EventManager implements EventManagerInterface {
 		//還要通知所有handler你被解除了
 		
 		mEventHandlerMap = new HashMap<Class<? extends EventBase>, ArrayList<EventProcessHandler> >();;
+	}
+
+	@Override
+	public String getName() {
+		return toString();
 	}
 
 }
