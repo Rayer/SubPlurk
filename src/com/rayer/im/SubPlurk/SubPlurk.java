@@ -78,7 +78,6 @@ public class SubPlurk extends Activity {
 				Intent intent = new Intent();
 				intent.setClass(SubPlurk.this, MainPlurkActivity.class);
 				intent.putExtras(bundle);
-				
 				startActivity(intent);
 				
 				break;

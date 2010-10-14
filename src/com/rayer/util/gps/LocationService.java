@@ -2,6 +2,7 @@ package com.rayer.util.gps;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -42,7 +43,7 @@ public class LocationService implements LocationListener{
 	LocationManager mLocMgr;
 	Context mContext;
 	EventManagerInterface mEm;
-	
+	GpsStatus mGpsStatus;
 	/**
 	 * 
 	 * @param context Application Context
@@ -218,6 +219,7 @@ public class LocationService implements LocationListener{
 		if(mEm != null)
 			mEm.sendMessage(new OnLocationUpdate(UpdateType.GPS, (int)(location.getLatitude() * 1E6), (int)(location.getLongitude() * 1E6)));
 		
+		
 	}
 
 	@Override
@@ -233,6 +235,12 @@ public class LocationService implements LocationListener{
 
 	@Override
 	final public void onStatusChanged(String provider, int status, Bundle extras) {
+		if(mGpsStatus == null)
+			mGpsStatus = mLocMgr.getGpsStatus(null);
+		else
+			mLocMgr.getGpsStatus(mGpsStatus);
+		
+		mEm.sendMessage(new OnGPSStatusChanged(mGpsStatus));
 		
 	}
 }

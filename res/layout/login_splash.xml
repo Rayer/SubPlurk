@@ -6,12 +6,12 @@
   
   <LinearLayout android:id="@+id/login_splash_id_input_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
   <TextView android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="Plurk ID" android:minWidth="100px"/>
-  <EditText android:id="@+id/login_splash_plurkid_et" android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+  <EditText android:id="@+id/login_splash_plurkid_et" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="text"/>
   </LinearLayout>
   
   <LinearLayout android:id="@+id/login_splash_pass_input_layout" android:layout_below="@+id/login_splash_id_input_layout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
   <TextView android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="Password" android:minWidth="100px"/>
-  <EditText android:id="@+id/login_splash_plurkpass_et" android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+  <EditText android:id="@+id/login_splash_plurkpass_et" android:layout_height="wrap_content" android:layout_width="fill_parent" android:inputType="textPassword"/>
   </LinearLayout>
   
   <com.rayer.views.SparklingView android:id="@+id/login_splash_gps_sv" android:layout_below="@+id/login_splash_pass_input_layout" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
@@ -19,11 +19,13 @@
 
   <Button android:text="Let's Rock!" android:id="@+id/login_splash_login_btn" android:layout_below="@+id/login_splash_gps_sv" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
   
-  <SlidingDrawer android:id="@+id/login_splash_sliding_drawer" android:layout_width="wrap_content" android:layout_height="wrap_content" android:handle="@+id/login_splash_drawer_ib" android:content="@+id/login_splash_sliding_drawer_content" android:orientation="horizontal">
+  <SlidingDrawer android:id="@+id/login_splash_sliding_drawer" android:layout_width="220dip" android:layout_height="wrap_content" android:handle="@+id/login_splash_drawer_ib" android:content="@+id/login_splash_sliding_drawer_content" android:orientation="horizontal" android:layout_alignParentRight="true">
     <ImageButton android:id="@+id/login_splash_drawer_ib" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:src="@drawable/icon" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-    <LinearLayout android:id="@+id/login_splash_sliding_drawer_content" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content">  
-      <Button android:text="@+id/Button01" android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-      <Button android:text="@+id/Button02" android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+    <LinearLayout android:id="@+id/login_splash_sliding_drawer_content" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="fill_parent" android:background="#FFC9EA05">  
+      <Button android:text="所以這顆紐要幹嘛?" android:id="@+id/Button01" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+      <Button android:text="問我咧?" android:id="@+id/Button02" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+      <TextView android:text="所以聽說這個是可拖放抽屜, 可是我們缺一張背景圖!!!" android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+	  <EditText android:text="還是把gps/網路狀況放這裡?" android:id="@+id/EditText01" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
     </LinearLayout>
   </SlidingDrawer>
 </RelativeLayout>
