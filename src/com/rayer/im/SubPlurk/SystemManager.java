@@ -34,7 +34,6 @@ public class SystemManager extends EventManager {
 		mLocation.init(mContext, this);	
 	}
 	
-	//PlurkController mController = new PlurkController();
 	PlurkControllerMT mControllerMT = new PlurkControllerMT(this);
 	LocationService mLocation = new LocationService();
 	

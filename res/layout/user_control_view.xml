@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+  
+  <ImageView android:id="@+id/user_control_avatar_iv" android:src="@drawable/default_avatar_big" android:layout_width="wrap_content" android:layout_height="106dip" android:scaleType="fitStart"/>
+  
+  <LinearLayout android:layout_toRightOf="@id/user_control_avatar_iv" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
+    <TextView android:text="Not logged in" android:id="@+id/user_control_name_tv" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <TextView android:text="Not logged in" android:id="@+id/user_control_uuid_tv" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+    <RelativeLayout android:id="@+id/user_control_karma_rl" android:layout_width="wrap_content" android:layout_height="wrap_content">
+      <TextView android:text="--" android:id="@+id/user_control_karma_tv" android:textSize="26dip" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+      <ProgressBar android:id="@+id/user_control_karma_pb" style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent" android:layout_height="5dip" android:layout_alignBaseline="@id/user_control_karma_tv" />
+    </RelativeLayout>
+</LinearLayout>
+</RelativeLayout>

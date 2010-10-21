@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="fill_parent"
+  android:layout_width="fill_parent">
+  
+  <com.rayer.im.SubPlurk.views.UserControlView android:id="@+id/main_usercontrol_view" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+  <SlidingDrawer android:id="@+id/login_splash_sliding_drawer" android:layout_width="260dip" android:layout_height="wrap_content" android:handle="@+id/login_splash_drawer_ib" android:content="@+id/login_drawer_view" android:orientation="horizontal" android:layout_alignParentRight="true">
+   <ImageView android:id="@+id/login_splash_drawer_ib" android:src="@drawable/icon" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+   <com.rayer.im.SubPlurk.views.LoginDrawerView android:id="@+id/login_drawer_view" android:layout_height="fill_parent" android:layout_width="fill_parent"/>
+  </SlidingDrawer>
+</RelativeLayout>

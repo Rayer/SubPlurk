@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:orientation="vertical"
+  android:background="#FF9AE219">
+  
+  <EditText android:id="@+id/login_drawer_acc_et" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Plurk Account"/>
+  <EditText android:id="@+id/login_drawer_pass_et" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Plurk Password"/>
+  <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content">  
+    <Button android:text="Let's Rooooock!" android:id="@+id/login_drawer_login_btn" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+    <Button android:text="Register!" android:id="@+id/login_drawer_register_btn" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>
+  </LinearLayout>
+  
+</LinearLayout>
