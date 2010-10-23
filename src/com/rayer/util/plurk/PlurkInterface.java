@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import com.rayer.util.network.PostObject;
 import com.rayer.util.plurk.data.PlurkScrap;
-import com.rayer.util.plurk.data.PublicUserInfo;
 import com.rayer.util.plurk.data.UserInfo;
 
 public interface PlurkInterface {
@@ -46,7 +45,7 @@ public interface PlurkInterface {
 	void updatePicture(PostObject obj);
 	
 	//API/Profile
-	PublicUserInfo getPublicProfile(int uid);
+	//PublicUserInfo getPublicProfile(int uid);
 	UserInfo getOwnProfile();
 	
 	/**

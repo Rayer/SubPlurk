@@ -4,6 +4,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -22,7 +24,8 @@ import android.util.Log;
 
 import com.rayer.util.network.PostObject;
 import com.rayer.util.plurk.data.PlurkScrap;
-import com.rayer.util.plurk.data.PublicUserInfo;
+import com.rayer.util.plurk.data.PlurkUser;
+import com.rayer.util.plurk.data.PlurksUsers;
 import com.rayer.util.plurk.data.UserInfo;
 import com.rayer.util.provisioner.FileSystemResourceProvisioner;
 import com.rayer.util.provisioner.InternetResourceProvisioner;
@@ -40,50 +43,21 @@ public class PlurkController implements PlurkInterface {
 	static final String API_KEY = "FCP5FqGgydpb4IijJcYZ6yUqQQTzHXer";
 	static final String MAIN_URL = "http://plurk.com/API/";
 	
-	ResourceProvisioner<PublicUserInfo> mUserInfoCache;
-	ResourceProvisioner<PublicUserInfo> mInternetUserInfoProvisioner;
-	
 	ResourceProvisioner<Bitmap> mUserAvatarFileSystemCacheMedium;
 	ResourceProvisioner<Bitmap> mUserAvatarCacheMedium;
 	
+	UserInfo mUserInfo;
+	
+	boolean mIsLoggedIn = false;
+	
 //	EventManager mEventManager = SystemManager.getInst();
 //	EventProcessHandler mHandler = new EventProcessHandler();
-	
-	HttpClient mClient = new DefaultHttpClient();
 	
 	public PlurkController() {
 		PostObject.setAPIParams("api_key", API_KEY);
 		PostObject.setPostfix(MAIN_URL);
 		
-		mUserInfoCache = new MemoryCacheResourceProvisioner<PublicUserInfo>(){
 
-			@Override
-			public boolean destroyElement(PublicUserInfo source) {
-				// TODO Auto-generated method stub
-				return false;
-			}};
-			
-		mInternetUserInfoProvisioner = new ResourceProvisioner<PublicUserInfo>(){
-
-			@Override
-			public PublicUserInfo getResource(String identificator) {
-				JSONObject response = getPublicProfileImpl(identificator);
-				PublicUserInfo ret = new PublicUserInfo(response);		
-				return ret;
-			}
-
-			@Override
-			public boolean setResource(String identificator,
-					PublicUserInfo targetResource) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			@Override
-			public boolean dereferenceResource(String identificator) {
-				// TODO Auto-generated method stub
-				return false;
-			}};
 		
 		mUserAvatarFileSystemCacheMedium = new FileSystemResourceProvisioner<Bitmap>("./sdcard/.subplurk/cache/medium/") {
 
@@ -118,9 +92,11 @@ public class PlurkController implements PlurkInterface {
 		HttpGet get = new HttpGet(post.toString());
 		ResponseHandler<String> res = new BasicResponseHandler();
 		
+		HttpClient client = new DefaultHttpClient();
+		
 		JSONObject response = null;
 		try {
-			response = new JSONObject(mClient.execute(get, res));
+			response = new JSONObject(client.execute(get, res));
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,10 +116,10 @@ public class PlurkController implements PlurkInterface {
 		PostObject post = new PostObject("/Users/register", "nick_name", nickname, "full_name", fullname, "password", password, "gender", gender, "date_of_birth", date_of_birth, "email", "opt_email");
 		HttpGet get = new HttpGet(post.toString());
 		ResponseHandler<String> handler = new BasicResponseHandler();
-		
+		HttpClient client = new DefaultHttpClient();
 		
 		JSONObject ret = null;
-		String result = mClient.execute(get, handler);
+		String result = client.execute(get, handler);
 		
 		try {
 			ret = new JSONObject(result);
@@ -171,9 +147,10 @@ public class PlurkController implements PlurkInterface {
 		HttpGet get = new HttpGet(obj.toString());
 		Log.d("subplurk", "attemping connect to : " + obj.toString());
 		ResponseHandler<String> handler = new BasicResponseHandler();
+		HttpClient client = new DefaultHttpClient();
 
 			//mClient.execute(get, handler);
-		result = mClient.execute(get, handler);
+		result = client.execute(get, handler);
 //		Log.d("subplurk", "ret : " + result);
 		try {
 			json = new JSONObject(result);
@@ -181,19 +158,58 @@ public class PlurkController implements PlurkInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		try {
+			mUserInfo = new UserInfo(json.getJSONObject("user_info"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return json;
 	}
 	
+	public void fillUserAvatarCache(PlurksUsers users) {
+		HashMap<Integer, PlurkUser> map = users.getUserMap();
+		
+		for(final Entry<Integer, PlurkUser> e : map.entrySet()) {
+			ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>(){
+
+				@Override
+				public String getIndentificator() {
+					// TODO Auto-generated method stub
+					return "" + e.getKey();
+				}};
+				
+			rp.addProvisioner(mUserAvatarCacheMedium);
+			rp.addProvisioner(mUserAvatarFileSystemCacheMedium);
+			rp.addProvisioner(new InternetResourceProvisioner<Bitmap>(){
+
+				@Override
+				public Bitmap formFromStream(InputStream is) {
+					return BitmapFactory.decodeStream(is);
+				}
+
+				@Override
+				public String getUrlAddress(String identificator) {
+					return createAvatarUrlMedium(e.getValue());
+				}});
+			
+		}
+
+	}
+
 	@Override
 	public boolean logout() {
-		PostObject.setAPIParams( "api_key", API_KEY);
+		PostObject.setAPIParams("api_key", API_KEY);
 		PostObject obj = new PostObject("Users/logout");
 		HttpGet get = new HttpGet(MAIN_URL + obj.toString());
 		ResponseHandler<String> handler = new BasicResponseHandler();
+		
+		HttpClient client = new DefaultHttpClient();
 
 		try {
-			mClient.execute(get, handler);
+			client.execute(get, handler);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			return false;
@@ -215,61 +231,52 @@ public class PlurkController implements PlurkInterface {
 
 	}
 
-	@Override
-	public PublicUserInfo getPublicProfile(final int uid) {
-		ResourceProxy<PublicUserInfo> rp = new ResourceProxy<PublicUserInfo>(){
-
-			@Override
-			public String getIndentificator() {
-				// TODO Auto-generated method stub
-				return "" + uid;
-			}};
-			
-		rp.addProvisioner(mUserInfoCache);
-		rp.addProvisioner(mInternetUserInfoProvisioner);
-		return rp.getResource(null);
-	}
+//	@Override
+//	public PublicUserInfo getPublicProfile(final int uid) {
+//		return null;
+//	}
 
 	@Override
 	public UserInfo getOwnProfile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public Bitmap getPortraitMedium(final int uid) {
+		PostObject obj = new PostObject("Profile/getOwnProfile");
+		JSONObject json = null;
+
+		String result = null;
+
+		HttpGet get = new HttpGet(obj.toString());
+		Log.d("subplurk", "attemping connect to : " + obj.toString());
+		ResponseHandler<String> handler = new BasicResponseHandler();
+		HttpClient client = new DefaultHttpClient();
+
+			//mClient.execute(get, handler);
+		try {
+			result = client.execute(get, handler);
+		} catch (ClientProtocolException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+//		Log.d("subplurk", "ret : " + result);
+		try {
+			json = new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		final PublicUserInfo info = getPublicProfile(uid);
-		return getPortraitMedium(info);
+		try {
+			mUserInfo = new UserInfo(json.getJSONObject("user_info"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return mUserInfo;
 
 	}
-	
-	public Bitmap getPortraitMedium(final PublicUserInfo info) {
-		
-		ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>(){
 
-			@Override
-			public String getIndentificator() {
-				return "" + info.getUserInfo().uid;
-			}};
-			
-		rp.addProvisioner(mUserAvatarFileSystemCacheMedium);
-		rp.addProvisioner(mUserAvatarCacheMedium);
-		rp.addProvisioner(new InternetResourceProvisioner<Bitmap>(){
 
-			@Override
-			public Bitmap formFromStream(InputStream is) {
-				return BitmapFactory.decodeStream(is);
-			}
-
-			@Override
-			public String getUrlAddress(String identificator) {
-				// TODO Auto-generated method stub
-				Log.d("SubPlurk", "Attemping to get avatar from url : " + info.getUserInfo().createAvatarUrlMedium());
-				return info.getUserInfo().createAvatarUrlMedium();
-			}});
-			
-			return rp.getResource(null);
-	}
 
 	@Override
 	public ArrayList<PlurkScrap> getResponses(int plurk_id, int offset) {
@@ -278,8 +285,10 @@ public class PlurkController implements PlurkInterface {
 		ResponseHandler<String> res = new BasicResponseHandler();
 		ArrayList<PlurkScrap> retArray = new ArrayList<PlurkScrap>();
 		
+		HttpClient client = new DefaultHttpClient();
+		
 		try {
-			String ret = mClient.execute(get, res);
+			String ret = client.execute(get, res);
 			JSONObject json = new JSONObject(ret);
 			
 			JSONArray arr = json.getJSONArray("responses");
@@ -303,10 +312,12 @@ public class PlurkController implements PlurkInterface {
 		PostObject post = new PostObject("Timeline/getPlurks", "offset", offset, "limit", "" + string, "filter", filter);
 		HttpGet get = new HttpGet(post.toString());
 		ResponseHandler<String> res = new BasicResponseHandler();
+		
+		HttpClient client = new DefaultHttpClient();
 
 		JSONObject json = null;
 		try {
-			String ret = mClient.execute(get, res);
+			String ret = client.execute(get, res);
 			json = new JSONObject(ret);
 			
 		} catch (ClientProtocolException e) {
@@ -319,23 +330,47 @@ public class PlurkController implements PlurkInterface {
 		
 		return json;
 	}
+
 	
-	public void startFillingFriendAvatarCache(JSONObject obj) {
-		try {
-			Log.d("SubPlurk", "plurk users request is : " + obj.toString());
-			JSONArray array = obj.getJSONArray("plurk_users");
-			for(int counter = 0; counter < array.length(); ++counter) {
-				PublicUserInfo pui = new PublicUserInfo((JSONObject)array.getJSONObject(counter));
-				this.getPortraitMedium(pui);
-			}
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	
+	public UserInfo getUserInfo() {
+		return mUserInfo;
 	}
 	
+	/**
+	 * Get url 
+	 * @param user
+	 * @return
+	 */
+	public String createAvatarUrlBig(PlurkUser user) {
+		if(user.has_profile_image == 0)
+			return "http://www.plurk.com/static/default_big.gif";
+		
+		if(user.avatar.equals(-1) || user.avatar.equals(0))
+			return "http://avatars.plurk.com/" + user.id + "-big.jpg";
+		
+		return "http://avatars.plurk.com/" + user.id + "-big" + user.avatar + ".jpg";
+	}
 	
-
+	public String createAvatarUrlMedium(PlurkUser user) {
+		if(user.has_profile_image == 0)
+			return "http://www.plurk.com/static/default_medium.gif";
+		
+		if(user.avatar.equals(-1) || user.avatar.equals(0))
+			return "http://avatars.plurk.com/" + user.id + "-medium.gif";
+		
+		return "http://avatars.plurk.com/" + user.id + "-medium" + user.avatar + ".gif";
+	}
+	
+	public String createAvatarUrlSmall(PlurkUser user) {
+		if(user.has_profile_image == 0)
+			return "http://www.plurk.com/static/default_small.gif";
+		
+		if(user.avatar.equals(-1) || user.avatar.equals(0))
+			return "http://avatars.plurk.com/" + user.id + "-small.gif";
+		
+		return "http://avatars.plurk.com/" + user.id + "-small" + user.avatar + ".gif";
+	}
 
 
 

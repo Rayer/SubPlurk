@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import com.rayer.util.event.EventManagerInterface;
 import com.rayer.util.plurk.events.OnPlurkLogin;
+import com.rayer.util.plurk.events.OnPlurkLogout;
 
 /**
  * Suspending... wait until main controller completed.
@@ -30,7 +31,8 @@ public class PlurkControllerMT extends PlurkController {
 	 */
 	public synchronized void async_login(final String username, final String password) {
 		
-		mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.ATTEMPING_LOGIN));
+		if(mEventManager != null)
+			mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.ATTEMPING_LOGIN));
 		
 		Thread thread = new Thread(new Runnable(){
 
@@ -41,16 +43,37 @@ public class PlurkControllerMT extends PlurkController {
 				try {
 					retObj = login(username, password);
 				} catch (ClientProtocolException e) {
-					mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_CERTIFICATION_ERROR));
+					if(mEventManager != null)
+						mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_CERTIFICATION_ERROR));
 					e.printStackTrace();
 					return;
 				} catch (IOException e) {
-					mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_TIMEOUT));
+					if(mEventManager != null)
+						mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_TIMEOUT));
 					e.printStackTrace();
 					return;
 				}
 				
-				mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_SUCCESS).setJSONObject(retObj));
+				if(mEventManager != null)
+					mEventManager.sendMessage(new OnPlurkLogin(OnPlurkLogin.LOGIN_SUCCESS).setJSONObject(retObj));
+			}});
+
+		thread.start();
+	}
+	
+	public void async_logout() {
+		if(mEventManager != null)
+			mEventManager.sendMessage(new OnPlurkLogout(OnPlurkLogout.ATTEMPING_LOGOUT));
+		
+		Thread thread = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				
+				boolean ret = logout();
+				
+				if(mEventManager != null)
+					mEventManager.sendMessage(ret ? new OnPlurkLogout(OnPlurkLogout.LOGOUT_SUCCESS) : new OnPlurkLogout(OnPlurkLogout.LOGIN_TIMEOUT));
 			}});
 
 		thread.start();

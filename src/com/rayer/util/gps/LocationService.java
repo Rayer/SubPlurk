@@ -1,7 +1,11 @@
 package com.rayer.util.gps;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -206,6 +210,20 @@ public class LocationService implements LocationListener{
 		toast.setView(layout);
 		toast.show();
 	}
+	
+//	public String getCurrentGeoCoding() {
+//		Geocoder gc = new Geocoder(mContext);
+//		String ret = "No address found!";
+//		try {
+//			Address addr = (gc.getFromLocation(mAutoPosition.getLatitude(), mAutoPosition.getLongitude(), 1)).get(0);
+//			ret = addr.getThoroughfare();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return ret;
+//	}
 
 	//Location Listener
 	@Override
@@ -242,6 +260,34 @@ public class LocationService implements LocationListener{
 		
 		mEm.sendMessage(new OnGPSStatusChanged(mGpsStatus));
 		
+	}
+
+	public void requestAddress(final RequestAddressListener requestAddressListener) {
+		new Thread(){
+
+			@Override
+			public void run() {
+				Geocoder gc = new Geocoder(mContext);
+				String ret = new String();
+				try {
+					Address addr = (gc.getFromLocation(mAutoPosition.getLatitude(), mAutoPosition.getLongitude(), 1)).get(0);
+					int addressLineCount = addr.getMaxAddressLineIndex();
+					if(addressLineCount >= 0)
+						for(int counter = 0; counter < addressLineCount; ++counter)
+							ret += addr.getAddressLine(counter) + " ";
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				requestAddressListener.onAddressFetched(ret);
+				
+				super.run();
+			}}.start();
+	}
+	
+	public interface RequestAddressListener {
+		void onAddressFetched(String address);
 	}
 }
 

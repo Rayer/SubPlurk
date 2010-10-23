@@ -5,7 +5,6 @@ import org.json.JSONObject;
 import com.rayer.util.databridge.JSONConverter;
 
 /**
- * 先暫時全部都寫String, 以後在慢慢改
  * @author rayer
  *
  */

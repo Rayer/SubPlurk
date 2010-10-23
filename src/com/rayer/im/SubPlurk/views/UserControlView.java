@@ -9,6 +9,7 @@ import com.rayer.util.plurk.data.UserInfo;
 import com.rayer.util.plurk.events.OnPlurkLogin;
 
 import android.content.Context;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -30,6 +31,23 @@ public class UserControlView extends RelativeLayout {
 	EventManager mEm;
 	
 	EventProcessHandler mHandler = new EventProcessHandler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			int identificator = msg.what;
+			
+			if(identificator == OnPlurkLogin.class.hashCode())
+				processUserProfile();
+			super.handleMessage(msg);
+		}
+
+		private void processUserProfile() {
+			UserInfo info = mController.getUserInfo();
+			if(info == null)
+				return;
+			
+			setData(info);
+		}
 		
 	};
 	
@@ -61,7 +79,7 @@ public class UserControlView extends RelativeLayout {
 		
 		mEm = SystemManager.getInst();
 		mEm.registerHandler(OnPlurkLogin.class, mHandler);
-		
+				
 	}
 	
 	void setData(UserInfo info) {
