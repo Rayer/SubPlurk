@@ -28,8 +28,18 @@ public class SystemManager extends EventManager {
 	Context mContext;
 	
 	public void init(Context context) {
-		mContext = context;
+		if(mContext != null)
+			return;
+		
+		mContext = context;		
 		mLocation.init(mContext, this);	
+		
+	}
+	
+	//很多情況下, 有些元件因為缺乏Context所以還來不及被產生
+	//所以要用它來確認一次這些元件的產生
+	public void confirmComponents(Context context) {
+		init(context);
 	}
 	
 	PlurkControllerMT mControllerMT = new PlurkControllerMT(this);

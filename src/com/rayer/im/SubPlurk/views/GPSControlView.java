@@ -1,6 +1,8 @@
 package com.rayer.im.SubPlurk.views;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
 import com.rayer.im.SubPlurk.R;
 import com.rayer.im.SubPlurk.SystemManager;
 import com.rayer.util.event.EventManager;
@@ -14,9 +16,11 @@ import com.rayer.views.SparklingView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint.Align;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,12 +29,18 @@ public class GPSControlView extends RelativeLayout {
 	TextView mPosition_tv;
 	TextView mAddress_tv;
 	SparklingView mStatus_sv;
+	Button mPostLocation_btn;
+	Button mPostAddress_btn;
+	MapView mMapView;
+	
+	MapController mMapController;
 	
 	EventManager mEm = SystemManager.getInst();
 	
 	Bitmap mGPSStatusOK;
 	Bitmap mGPSStatusFailed;
 	LocationService mLs;
+	
 	
 	EventProcessHandler mHandler = new EventProcessHandler() {
 		
@@ -106,6 +116,10 @@ public class GPSControlView extends RelativeLayout {
 		mPosition_tv = (TextView) findViewById(R.id.gps_control_location_tv);
 		mStatus_sv = (SparklingView) findViewById(R.id.gps_control_status_sv);
 		mAddress_tv = (TextView) findViewById(R.id.gps_control_address_tv);
+		mPostLocation_btn = (Button) findViewById(R.id.gps_control_postlocation_btn);
+		mPostAddress_btn = (Button) findViewById(R.id.gps_control_postaddress_btn);
+		mMapView = (MapView) findViewById(R.id.gps_control_mapview);
+		mMapController = mMapView.getController();
 		
 		//mPosition_ts.setText("Position determining...");
 		
@@ -113,6 +127,14 @@ public class GPSControlView extends RelativeLayout {
 		mGPSStatusFailed = BitmapFactory.decodeResource(getContext().getResources(), android.R.drawable.arrow_down_float);
 		
 		setIndicatorOnline(false);
+		
+		SystemManager.getInst().confirmComponents(getContext());
+		//initialize map control
+		mMapController.animateTo(mLs.getLocation());
+		mMapController.setZoom(16);
+		
+		MapView.LayoutParams mlp = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT, MapView.LayoutParams.WRAP_CONTENT, mLs.getLocation(), 1);
+		
 	}
 	
 	private String generatePositionString(GeoPoint gp) {
@@ -124,6 +146,8 @@ public class GPSControlView extends RelativeLayout {
 		
 		return sb.toString();
 	}
+	
+	
 	
 
 }

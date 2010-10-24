@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -47,18 +49,17 @@ public class PlurkController implements PlurkInterface {
 	ResourceProvisioner<Bitmap> mUserAvatarCacheMedium;
 	
 	UserInfo mUserInfo;
+	PlurksUsers mInPlurkUsers;
 	
 	boolean mIsLoggedIn = false;
-	
+		
 //	EventManager mEventManager = SystemManager.getInst();
 //	EventProcessHandler mHandler = new EventProcessHandler();
 	
 	public PlurkController() {
 		PostObject.setAPIParams("api_key", API_KEY);
 		PostObject.setPostfix(MAIN_URL);
-		
-
-		
+	
 		mUserAvatarFileSystemCacheMedium = new FileSystemResourceProvisioner<Bitmap>("./sdcard/.subplurk/cache/medium/") {
 
 			@Override
@@ -166,11 +167,37 @@ public class PlurkController implements PlurkInterface {
 			e.printStackTrace();
 		}
 		
+		//TODO change to merge therefore.
+		mInPlurkUsers = new PlurksUsers(json);
+		
+		//做cache
+		getInPlurkAvatars(mInPlurkUsers);
 		return json;
 	}
 	
-	public void fillUserAvatarCache(PlurksUsers users) {
+	public PlurksUsers getCurrentInPlurkUsers() {
+		return mInPlurkUsers;
+	}
+	
+	public Bitmap getPlurkerAvatar(final int uuid) {
+		ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>() {
+
+			@Override
+			public String getIndentificator() {
+				// TODO Auto-generated method stub
+				return "" + uuid;
+			}
+		};
+		
+		rp.addProvisioner(mUserAvatarCacheMedium);
+		rp.addProvisioner(mUserAvatarFileSystemCacheMedium);
+		
+		return rp.getResource(null);
+	}
+	
+	public ArrayList<Bitmap> getInPlurkAvatars(PlurksUsers users) {
 		HashMap<Integer, PlurkUser> map = users.getUserMap();
+		ArrayList<Bitmap> ret = new ArrayList<Bitmap>();
 		
 		for(final Entry<Integer, PlurkUser> e : map.entrySet()) {
 			ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>(){
@@ -194,8 +221,10 @@ public class PlurkController implements PlurkInterface {
 				public String getUrlAddress(String identificator) {
 					return createAvatarUrlMedium(e.getValue());
 				}});
-			
+			ret.add(rp.getResource(null));
 		}
+		
+		return ret;
 
 	}
 
@@ -335,6 +364,65 @@ public class PlurkController implements PlurkInterface {
 	
 	public UserInfo getUserInfo() {
 		return mUserInfo;
+	}
+	
+	public enum AvatarSize {
+		SMALL,
+		MEDIUM,
+		BIG
+	}
+	
+	public Bitmap getUserAvatar(AvatarSize size) {
+		String url = null;
+		
+		switch(size) {
+		case SMALL:
+			url = mUserInfo.createAvatarUrlSmall();
+			break;
+		case MEDIUM:
+			url = mUserInfo.createAvatarUrlMedium();
+			break;
+		case BIG:
+			url = mUserInfo.createAvatarUrlBig();
+			break;
+		}
+		
+		final String targetUrl = url;
+				
+		ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>() {
+
+			@Override
+			public String getIndentificator() {
+				// TODO Auto-generated method stub
+				return targetUrl;
+			}
+		};
+		
+		rp.addProvisioner(new FileSystemResourceProvisioner<Bitmap>("./sdcard/.SubPlurk/cache/userAvatar"){
+
+			@Override
+			public Bitmap formFromStream(InputStream in) {
+				return BitmapFactory.decodeStream(in);
+			}
+
+			@Override
+			public void writeToOutputStream(Bitmap target, FileOutputStream fo) {
+				target.compress(CompressFormat.PNG, 100, fo);
+			}});
+		
+		rp.addProvisioner(new InternetResourceProvisioner<Bitmap>(){
+
+			@Override
+			public Bitmap formFromStream(InputStream is) {
+				return BitmapFactory.decodeStream(is);
+			}
+
+			@Override
+			public String getUrlAddress(String identificator) {
+				return targetUrl;
+			}});
+		
+		return rp.getResource(null);
 	}
 	
 	/**

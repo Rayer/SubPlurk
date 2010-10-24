@@ -7,7 +7,7 @@
   android:background="#FF00169F">
   
   <EditText android:id="@+id/login_drawer_acc_et" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Plurk Account"/>
-  <EditText android:id="@+id/login_drawer_pass_et" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Plurk Password"/>
+  <EditText android:id="@+id/login_drawer_pass_et" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Plurk Password" android:inputType="textPassword"/>
   <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content">  
     <Button android:text="Let's Rooooock!" android:id="@+id/login_drawer_login_btn" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
     <Button android:text="Register!" android:id="@+id/login_drawer_register_btn" android:layout_width="fill_parent" android:layout_height="wrap_content"></Button>

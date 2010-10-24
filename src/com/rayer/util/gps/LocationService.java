@@ -112,9 +112,12 @@ public class LocationService implements LocationListener{
 		GeoPoint ret = null;
 		if(mAutoPosition == null)
 		{
-			GeoPoint man = getManualSetPreference();
-			ret = new GeoPoint(man.getLatitudeE6(), man.getLongitudeE6());
-			createNoGPSWarningToast();
+			//GeoPoint man = getManualSetPreference();
+			//ret = new GeoPoint(man.getLatitudeE6(), man.getLongitudeE6());
+			//createNoGPSWarningToast();
+			
+			Location lastKnown = mLocMgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			ret = new GeoPoint((int)(lastKnown.getLatitude() * 1E6), (int)(lastKnown.getLongitude() * 1E6));
 		}
 		else
 			ret = new GeoPoint((int)(mAutoPosition.getLatitude() * 1E6), (int)(mAutoPosition.getLongitude() * 1E6));
@@ -262,9 +265,16 @@ public class LocationService implements LocationListener{
 		
 	}
 
+	Thread mAddressRequestThread = null;
 	public void requestAddress(final RequestAddressListener requestAddressListener) {
-		new Thread(){
+		
+		//不需要request那麼多次, 只要request最新的結果就可以了
+		if(mAddressRequestThread != null)
+			return;
+		
+		mAddressRequestThread = new Thread(){
 
+			//need to set a timeout time?
 			@Override
 			public void run() {
 				Geocoder gc = new Geocoder(mContext);
@@ -281,13 +291,18 @@ public class LocationService implements LocationListener{
 				}
 				
 				requestAddressListener.onAddressFetched(ret);
+				mAddressRequestThread = null;
 				
 				super.run();
-			}}.start();
+			}};
+			
+			mAddressRequestThread.run();
 	}
 	
 	public interface RequestAddressListener {
 		void onAddressFetched(String address);
 	}
+	
+	
 }
 

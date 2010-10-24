@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, SubPlurk!</string>
     <string name="app_name">SubPlurk</string>
+    <string name="map_apiKey">0lIGc0fz32B9fvp6EEWNJMTHS_IAixEKWR8y0Dw</string>
 </resources>

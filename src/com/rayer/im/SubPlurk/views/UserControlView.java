@@ -4,6 +4,7 @@ import com.rayer.im.SubPlurk.R;
 import com.rayer.im.SubPlurk.SystemManager;
 import com.rayer.util.event.EventManager;
 import com.rayer.util.event.EventProcessHandler;
+import com.rayer.util.plurk.PlurkController.AvatarSize;
 import com.rayer.util.plurk.PlurkControllerMT;
 import com.rayer.util.plurk.data.UserInfo;
 import com.rayer.util.plurk.events.OnPlurkLogin;
@@ -87,6 +88,8 @@ public class UserControlView extends RelativeLayout {
 		mName_tv.setText(info.nick_name);
 		mUUID_tv.setText("" + info.uid);
 		setKarma(info.karma);
+		mAvatar_iv.setImageBitmap(mController.getUserAvatar(AvatarSize.BIG));
+
 	}
 	
 	void setKarma(double karma) {

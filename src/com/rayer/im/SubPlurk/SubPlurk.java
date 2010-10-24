@@ -1,17 +1,17 @@
 package com.rayer.im.SubPlurk;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Message;
 import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 
+import com.google.android.maps.MapActivity;
 import com.rayer.im.SubPlurk.views.LoginDrawerView;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.events.OnPlurkLogin;
 
-public class SubPlurk extends Activity {
+public class SubPlurk extends MapActivity {
 	    
 	RelativeLayout mMainSplash;
     LoginDrawerView mLoginDrawer;
@@ -68,7 +68,6 @@ public class SubPlurk extends Activity {
         mDrawer = (SlidingDrawer) findViewById(R.id.main_login_drawer);
         
         mPd = new ProgressDialog(this);
-        //mMainSplash.addView(mPd);
     }
     
     @Override
@@ -81,6 +80,12 @@ public class SubPlurk extends Activity {
 	protected void onStop() {
 		mSys.getLocationService().disableService();
 		super.onStop();
+	}
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
     
     
