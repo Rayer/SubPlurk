@@ -63,6 +63,7 @@ public class SubPlurk extends MapActivity {
         mSys.init(this);
         
         mSys.registerHandler(OnPlurkLogin.class, mHandler);
+        mSys.removeHandler(OnPlurkLogin.class, mHandler);
         
         mMainSplash = (RelativeLayout) findViewById(R.id.main_splash);
         mDrawer = (SlidingDrawer) findViewById(R.id.main_login_drawer);

@@ -16,7 +16,6 @@ import com.rayer.views.SparklingView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Paint.Align;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

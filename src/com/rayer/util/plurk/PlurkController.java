@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -146,8 +148,17 @@ public class PlurkController implements PlurkInterface {
 
 
 		HttpGet get = new HttpGet(obj.toString());
+		//HttpPost post = new HttpPost(obj.toString());
 		Log.d("subplurk", "attemping connect to : " + obj.toString());
 		ResponseHandler<String> handler = new BasicResponseHandler();
+//		ResponseHandler<String> handler = new ResponseHandler<String>(){
+//
+//			@Override
+//			public String handleResponse(HttpResponse response)
+//					throws ClientProtocolException, IOException {
+//				response.
+//				return null;
+//			}};
 		HttpClient client = new DefaultHttpClient();
 
 			//mClient.execute(get, handler);
