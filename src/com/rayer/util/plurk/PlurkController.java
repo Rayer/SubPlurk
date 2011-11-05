@@ -83,6 +83,12 @@ public class PlurkController implements PlurkInterface {
 			public boolean destroyElement(Bitmap source) {
 				source.recycle();
 				return true;
+			}
+
+			@Override
+			public boolean clearAllCachedResource() {
+				// TODO Auto-generated method stub
+				return false;
 			}};
 			
 		//這很麻煩 因為她的indentificator要等到拿到UserInfo才能決定
