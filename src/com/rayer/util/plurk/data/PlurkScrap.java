@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.rayer.util.databridge.DebugBridge;
 import com.rayer.util.databridge.JSONConverter;
 
@@ -14,21 +16,36 @@ import com.rayer.util.databridge.JSONConverter;
  * @author rayer
  *
  */
+
+@DatabaseTable(tableName="plurkScrap")
 public class PlurkScrap {
+	@DatabaseField(id=true)
 	public Integer 	plurk_id;
+	@DatabaseField
 	public String 	qualifier;
+	@DatabaseField
 	public String 	qualifier_translated;
+	@DatabaseField
 	public Integer 	is_unread;
+	@DatabaseField
 	public Integer 	plurk_type;
+	@DatabaseField
 	public Integer 	user_id;
+	@DatabaseField
 	public Integer 	owner_id;
+	@DatabaseField
 	public String 	posted;
+	@DatabaseField
 	public Integer 	no_comments;
+	@DatabaseField
 	public String 	content;
+	@DatabaseField
 	public String 	content_raw;
+	@DatabaseField
 	public Integer	response_count;
+	@DatabaseField
 	public Integer	response_seen;
-	
+	@DatabaseField
 	protected JSONObject limited_to;
 	
 	public PlurkScrap(JSONObject obj) {

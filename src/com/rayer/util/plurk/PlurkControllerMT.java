@@ -1,11 +1,9 @@
 package com.rayer.util.plurk;
 
 import java.io.IOException;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
-
-import android.content.Context;
-import android.graphics.Bitmap;
 
 import com.rayer.util.event.EventManagerInterface;
 import com.rayer.util.plurk.events.OnPlurkLogin;

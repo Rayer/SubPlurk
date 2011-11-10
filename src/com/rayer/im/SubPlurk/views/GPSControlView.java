@@ -1,5 +1,15 @@
 package com.rayer.im.SubPlurk.views;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Message;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
@@ -12,16 +22,6 @@ import com.rayer.util.gps.LocationService.RequestAddressListener;
 import com.rayer.util.gps.OnLocationServiceInit;
 import com.rayer.util.gps.OnLocationUpdate;
 import com.rayer.views.SparklingView;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Message;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class GPSControlView extends RelativeLayout {
 	
@@ -132,7 +132,7 @@ public class GPSControlView extends RelativeLayout {
 		mMapController.animateTo(mLs.getLocation());
 		mMapController.setZoom(16);
 		
-		MapView.LayoutParams mlp = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT, MapView.LayoutParams.WRAP_CONTENT, mLs.getLocation(), 1);
+		//MapView.LayoutParams mlp = new MapView.LayoutParams(MapView.LayoutParams.WRAP_CONTENT, MapView.LayoutParams.WRAP_CONTENT, mLs.getLocation(), 1);
 		
 	}
 	

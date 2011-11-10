@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,7 +55,6 @@ public class SparklingView extends LinearLayout {
 	
 	
 	void initialize() {
-		Log.d("SubPlurk", "SV initialization.");
 		mSparklingImageIV = new ImageView(getContext());
 		mDescriptionHolder = new TextView(getContext());
 		

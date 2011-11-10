@@ -1,14 +1,5 @@
 package com.rayer.im.SubPlurk.views;
 
-import com.rayer.im.SubPlurk.R;
-import com.rayer.im.SubPlurk.SystemManager;
-import com.rayer.util.event.EventManager;
-import com.rayer.util.event.EventProcessHandler;
-import com.rayer.util.plurk.PlurkController.AvatarSize;
-import com.rayer.util.plurk.PlurkControllerMT;
-import com.rayer.util.plurk.data.UserInfo;
-import com.rayer.util.plurk.events.OnPlurkLogin;
-
 import android.content.Context;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -17,6 +8,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.rayer.im.SubPlurk.R;
+import com.rayer.im.SubPlurk.SystemManager;
+import com.rayer.util.event.EventManager;
+import com.rayer.util.event.EventProcessHandler;
+import com.rayer.util.plurk.PlurkController.AvatarSize;
+import com.rayer.util.plurk.PlurkControllerMT;
+import com.rayer.util.plurk.data.UserInfo;
+import com.rayer.util.plurk.events.OnPlurkLogin;
 
 public class UserControlView extends RelativeLayout {
 
