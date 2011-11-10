@@ -40,13 +40,17 @@ public class LoginDrawerView extends RelativeLayout {
 		mPassword_et = (EditText) findViewById(R.id.login_drawer_pass_et);
 		mLogin_btn = (Button) findViewById(R.id.login_drawer_login_btn);
 		
+		mAccount_et.setText(SystemManager.getInst().getAccountManager().getLastLoginSucceedAcc());
+		mPassword_et.setText(SystemManager.getInst().getAccountManager().getLastLoginSucceedPass());
+		
 		mController = SystemManager.getInst().getPlurkController();
 		
 		mLogin_btn.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				mController.async_login(mAccount_et.getText().toString(), mPassword_et.getText().toString());
+				//mController.async_login(mAccount_et.getText().toString(), mPassword_et.getText().toString());
+				SystemManager.getInst().getAccountManager().attempLogging(mAccount_et.getText().toString(), mPassword_et.getText().toString());
 				InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(getApplicationWindowToken(), 0);
 			}});

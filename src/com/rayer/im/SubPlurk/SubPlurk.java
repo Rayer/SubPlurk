@@ -2,13 +2,14 @@ package com.rayer.im.SubPlurk;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Message;
+import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 
 import com.google.android.maps.MapActivity;
 import com.rayer.im.SubPlurk.manager.SystemManager;
 import com.rayer.im.SubPlurk.views.LoginDrawerView;
+import com.rayer.util.event.EventBase;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.events.OnPlurkLogin;
 
@@ -23,18 +24,10 @@ public class SubPlurk extends MapActivity {
     
 	EventProcessHandler mHandler = new EventProcessHandler(){
 
-		@Override
-		public void handleMessage(Message msg) {
-			int identificator = msg.what;
+		private void processLogin(int message) {
+			Log.d("SubPlurk", "get OnPlurkLogin");
 			
-			if(identificator == OnPlurkLogin.class.hashCode())
-				processLogin(msg);
-			super.handleMessage(msg);
-		}
-
-		private void processLogin(Message msg) {
-			
-			switch(msg.arg1) {
+			switch(message) {
 			case OnPlurkLogin.ATTEMPING_LOGIN:
 				mPd.setTitle("Login");
 				mPd.setMessage("Attemping Login...");
@@ -52,6 +45,14 @@ public class SubPlurk extends MapActivity {
 				break;
 			}
 				
+		}
+
+		@Override
+		public void processEvent(Class<? extends EventBase> event, int arg1,
+				int arg2, Object obj) {
+			if(event == OnPlurkLogin.class)
+				processLogin(arg1);
+			
 		}};
 
     /** Called when the activity is first created. */

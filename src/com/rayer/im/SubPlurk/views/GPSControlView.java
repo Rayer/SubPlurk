@@ -15,6 +15,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.rayer.im.SubPlurk.R;
 import com.rayer.im.SubPlurk.manager.SystemManager;
+import com.rayer.util.event.EventBase;
 import com.rayer.util.event.EventManager;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.gps.LocationService;
@@ -85,6 +86,13 @@ public class GPSControlView extends RelativeLayout {
 					msg.obj = address;
 					sendMessage(msg);
 				}});
+			
+		}
+
+		@Override
+		public void processEvent(Class<? extends EventBase> event, int arg1,
+				int arg2, Object obj) {
+			// TODO Auto-generated method stub
 			
 		}
 		

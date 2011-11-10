@@ -1,7 +1,6 @@
 package com.rayer.im.SubPlurk.views;
 
 import android.content.Context;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 
 import com.rayer.im.SubPlurk.R;
 import com.rayer.im.SubPlurk.manager.SystemManager;
+import com.rayer.util.event.EventBase;
 import com.rayer.util.event.EventManager;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.PlurkController.AvatarSize;
@@ -33,14 +33,6 @@ public class UserControlView extends RelativeLayout {
 	
 	EventProcessHandler mHandler = new EventProcessHandler() {
 
-		@Override
-		public void handleMessage(Message msg) {
-			int identificator = msg.what;
-			
-			if(identificator == OnPlurkLogin.class.hashCode())
-				processUserProfile();
-			super.handleMessage(msg);
-		}
 
 		private void processUserProfile() {
 			UserInfo info = mController.getUserInfo();
@@ -48,6 +40,13 @@ public class UserControlView extends RelativeLayout {
 				return;
 			
 			setData(info);
+		}
+
+		@Override
+		public void processEvent(Class<? extends EventBase> event, int arg1,
+				int arg2, Object obj) {
+			if(event == OnPlurkLogin.class)
+				processUserProfile();
 		}
 		
 	};

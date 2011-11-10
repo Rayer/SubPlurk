@@ -26,6 +26,7 @@ public class SystemManager extends EventManager {
 	}
 	
 	Context mContext;
+	AccountManager mAccount;
 	
 	public void init(Context context) {
 		if(mContext != null)
@@ -33,7 +34,7 @@ public class SystemManager extends EventManager {
 		
 		mContext = context;		
 		mLocation.init(mContext, this);	
-		
+		mAccount = new AccountManager(context);
 	}
 	
 	//很多情況下, 有些元件因為缺乏Context所以還來不及被產生
@@ -50,6 +51,10 @@ public class SystemManager extends EventManager {
 	}
 	public LocationService getLocationService() {
 		return mLocation;
+	}
+	
+	public AccountManager getAccountManager() {
+		return mAccount;
 	}
 	
 }
