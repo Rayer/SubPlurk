@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.rayer.im.SubPlurk.R;
-import com.rayer.im.SubPlurk.SystemManager;
+import com.rayer.im.SubPlurk.manager.SystemManager;
 import com.rayer.util.plurk.PlurkControllerMT;
 
 public class LoginDrawerView extends RelativeLayout {

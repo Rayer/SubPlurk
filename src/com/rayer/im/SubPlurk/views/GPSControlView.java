@@ -14,7 +14,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.rayer.im.SubPlurk.R;
-import com.rayer.im.SubPlurk.SystemManager;
+import com.rayer.im.SubPlurk.manager.SystemManager;
 import com.rayer.util.event.EventManager;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.gps.LocationService;

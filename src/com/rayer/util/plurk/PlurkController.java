@@ -43,8 +43,8 @@ public class PlurkController implements PlurkInterface {
 	static final String API_KEY = "FCP5FqGgydpb4IijJcYZ6yUqQQTzHXer";
 	static final String MAIN_URL = "http://plurk.com/API/";
 	
-	ResourceProvisioner<Bitmap> mUserAvatarFileSystemCacheMedium;
-	ResourceProvisioner<Bitmap> mUserAvatarCacheMedium;
+	ResourceProvisioner<Bitmap, String> mUserAvatarFileSystemCacheMedium;
+	ResourceProvisioner<Bitmap, String> mUserAvatarCacheMedium;
 	
 	UserInfo mUserInfo;
 	PlurksUsers mInPlurkUsers;
@@ -58,7 +58,7 @@ public class PlurkController implements PlurkInterface {
 		PostObject.setAPIParams("api_key", API_KEY);
 		PostObject.setPostfix(MAIN_URL);
 	
-		mUserAvatarFileSystemCacheMedium = new FileSystemResourceProvisioner<Bitmap>("./sdcard/.subplurk/cache/medium/") {
+		mUserAvatarFileSystemCacheMedium = new FileSystemResourceProvisioner<Bitmap, String>("./sdcard/.subplurk/cache/medium/") {
 
 			@Override
 			public Bitmap formFromStream(InputStream in) {
@@ -73,7 +73,7 @@ public class PlurkController implements PlurkInterface {
 			}
 		};
 			
-		mUserAvatarCacheMedium = new MemoryCacheResourceProvisioner<Bitmap>(){
+		mUserAvatarCacheMedium = new MemoryCacheResourceProvisioner<Bitmap, String>(){
 
 			@Override
 			public boolean destroyElement(Bitmap source) {
@@ -193,7 +193,7 @@ public class PlurkController implements PlurkInterface {
 	}
 	
 	public Bitmap getPlurkerAvatar(final int uuid) {
-		ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>() {
+		ResourceProxy<Bitmap, String> rp = new ResourceProxy<Bitmap, String>() {
 
 			@Override
 			public String getIndentificator() {
@@ -213,7 +213,7 @@ public class PlurkController implements PlurkInterface {
 		ArrayList<Bitmap> ret = new ArrayList<Bitmap>();
 		
 		for(final Entry<Integer, PlurkUser> e : map.entrySet()) {
-			ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>(){
+			ResourceProxy<Bitmap, String> rp = new ResourceProxy<Bitmap, String>(){
 
 				@Override
 				public String getIndentificator() {
@@ -223,7 +223,7 @@ public class PlurkController implements PlurkInterface {
 				
 			rp.addProvisioner(mUserAvatarCacheMedium);
 			rp.addProvisioner(mUserAvatarFileSystemCacheMedium);
-			rp.addProvisioner(new InternetResourceProvisioner<Bitmap>(){
+			rp.addProvisioner(new InternetResourceProvisioner<Bitmap, String>(){
 
 				@Override
 				public Bitmap formFromStream(InputStream is) {
@@ -402,7 +402,7 @@ public class PlurkController implements PlurkInterface {
 		
 		final String targetUrl = url;
 				
-		ResourceProxy<Bitmap> rp = new ResourceProxy<Bitmap>() {
+		ResourceProxy<Bitmap, String> rp = new ResourceProxy<Bitmap, String>() {
 
 			@Override
 			public String getIndentificator() {
@@ -411,7 +411,7 @@ public class PlurkController implements PlurkInterface {
 			}
 		};
 		
-		rp.addProvisioner(new FileSystemResourceProvisioner<Bitmap>("./sdcard/.SubPlurk/cache/userAvatar"){
+		rp.addProvisioner(new FileSystemResourceProvisioner<Bitmap, String>("./sdcard/.SubPlurk/cache/userAvatar"){
 
 			@Override
 			public Bitmap formFromStream(InputStream in) {
@@ -423,7 +423,7 @@ public class PlurkController implements PlurkInterface {
 				target.compress(CompressFormat.PNG, 100, fo);
 			}});
 		
-		rp.addProvisioner(new InternetResourceProvisioner<Bitmap>(){
+		rp.addProvisioner(new InternetResourceProvisioner<Bitmap, String>(){
 
 			@Override
 			public Bitmap formFromStream(InputStream is) {

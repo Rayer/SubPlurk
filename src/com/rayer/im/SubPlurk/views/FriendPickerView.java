@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rayer.im.SubPlurk.R;
-import com.rayer.im.SubPlurk.SystemManager;
+import com.rayer.im.SubPlurk.manager.SystemManager;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.PlurkControllerMT;
 import com.rayer.util.plurk.data.PlurkUser;

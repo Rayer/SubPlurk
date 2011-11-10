@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
 
 import com.google.android.maps.MapActivity;
+import com.rayer.im.SubPlurk.manager.SystemManager;
 import com.rayer.im.SubPlurk.views.LoginDrawerView;
 import com.rayer.util.event.EventProcessHandler;
 import com.rayer.util.plurk.events.OnPlurkLogin;
